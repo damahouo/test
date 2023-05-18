@@ -1,0 +1,238 @@
+$(`选择器`).css(`backgroundColor`,`pink`)
+$(`选择器`).dblclick(function(){})   	绑定双击事件
+.trim()	去除字符串两端的空格
+
+设置网页元素文本内容的方法
+$(`选择器`).html(`内容`)	支持解析标签
+$(`选择器`).text(`内容`)	不支持解析标签		
+读取网页元素文本内容的方法
+$(`选择器`).html(``)		获取标签
+$(`选择器`).text(``)		只获取文本
+
+last-child  first-child nth()-child
+$(``).first()		第一个子元素
+$(``).last()		最后一个子元素
+$(``).eq(索引号)	第索引个子元素 从0 开始
+$(`父元素`).find(`子元素`)	找到父元素中的子元素
+
+$(``).attr(`属性名`，`属性值`)	标签属性名赋值
+$(``).attr(`属性名`)		获取标签属性名的值获取自定义属性的值
+$(``).removeAttr(`属性名`)	删除标签的属性值
+
+$(``).val(`参数`)		为表单元素赋值
+$(``).val(``)		为表单元素取值
+
+$(``).addClass 		添加类名
+$(``).removeClass		移除类名
+$(``).toggleClass		切换类名
+$(``).hasClass		判断类名是否存在，返回一个布尔值
+
+.on(`事件名`,fun(){}）	添加事件名  重点时input事件，只能用on方法绑定
+.off(`事件名`)		移除事件名，括号内不写就会移除所有事件名
+.one(`事件名`,fun(){})		添加一次性事件
+
+触发事件
+.事件名()			直接触发
+.trigger(`事件名`)		也是直接触发 input输入事件只能通过trigger触发
+.trigger(`自定义事件名`)	触发自定义事件
+.on(`自定义事件`,fun(){})	自定义事件，自定义事件只能通过trigger触发
+
+window绑定事件
+$(window).scroll(function(){})		滚动事件 windo注册页面滚动事件  html设置页面滚动距离！！！！
+$(window).click(function(){})		点击事件
+
+获取元素的位置 元素定位，返回值（top：，left：）
+$(``).offset()		参照html标签，包含margin  可以设置当前元素距离html标签的位置，css的left，top等的可以设置  
+当前元素距离父辈的位置
+$(``).position()		参照最近有定位的祖先元素 不计算margin
+
+$(`#angel`)
+          .css(`left`, e.pageX + `px`)
+          .css(`top`, e.pageY + `px`)	css连续设置元素的位置
+
+获取元素滚动距离
+$(``).scrollLeft() 		取值  		windo注册页面滚动事件  html设置页面滚动距离！！！！
+$(``).scrollTop()		取值		windo注册页面滚动事件  html设置页面滚动距离！！！！
+
+$(``).scrollLeft(值)		赋值
+$(``).scrollTop(值)		赋值 
+
+显示隐藏动画效果
+$(``).show(持续时间)		显示  单位毫秒       不设置时间为切换效果
+$(``).hide(持续时间)		隐藏  单位毫秒      不设置时间为切换效果
+$(``).toggle(持续时间)	显示和隐藏切换  单位毫秒      不设置时间为切换效果
+
+淡入淡出动画效果
+$(``).fadeIn()		淡入显示动画效果		时间单位为毫秒，不写也有动画效果，改变透明度opactity至完全显示
+$(``).fadeOut()		淡出隐藏动画效果		时间单位为毫秒，不写也有动画效果，改变透明度opactity至完全消失
+$(``).fadeToggle()		淡入淡出动画切换效果	时间单位为毫秒，不写也有动画效果，
+
+展开收起动画效果
+$(``).slideDown()		向下展开动画效果
+$(``).slideUp()		向上隐藏动画效果
+$(``).slideToggle()		向下展开向上隐藏动画切换效果
+
+动画队列及停止动画方法
+$(``).stop()		停止当前动画 不影响后续的动画	  添加在动画前面， 可以解决一段时间内多次触发动画后，动画反复执行的情况	
+$(``).stop(true)		清空队列，在动画当前状态停止 后续动画不再播放
+$(``).stop(true,true)		清空队列，直接到当前动画的结束状态 后续动画不再播放
+
+自定义动画
+$(``).animate({动画属性}，时间)	只支持数值类的样式，默认单位px，可以改成百分比，也支持滚动条动画
+
+在指定位置动态插入元素节点的方法，可以新增节点或者改变节点位置
+$(`父元素选择器`).append(参数)	父元素结尾	（参数可以解析标签），可以写一个新的，也可以抓取现有的  
+						列表里推内容用append 数组里推内容用push
+$(`父元素选择器`).prepend(参数)	父元素开头	·插入节点：传入创建的dom元素或者html结构
+$(`兄弟元素选择器`).before(参数)	兄弟元素前面	·改变位置：传入现有的dom元素或者jQuery对象
+$(`兄弟元素选择器`).after(参数)		兄弟元素后面
+$(``).empty()			清空选择器里的内容
+
+动画支持传入回调函数	回调函数会在动画执行完毕之后立刻执行 ，。回调函数中的this指向函数的调用者DOM元素
+$(``).基础动画方法（回调函数）
+$(``).基础动画方法（持续时间，回调函数）
+$(``).animate（属性，回调函数）				
+$(``).animate（属性，持续时间，回调函数）
+
+动画的延迟播放 毫秒
+$(``).delay(延迟时间).动画方法()
+$(``).delay(延迟时间).动画方法(）.delay(延迟时间).动画方法()
+
+获取元素尺寸
+$(``).width()		内容的高度
+$(``).height()		内容的宽度
+$(``).innerWidth()		内容宽度+内边距	padding
+$(``).innerHeight()		内容宽度+内边距 	padding
+$(``).outerWidth()		内容宽度+内边距+边框	border	
+$(``).outerHeight()		内容高度+内边距+边框	border
+$(``).outerWidth(true)	内容宽度+内边距+边框	border+margin
+$(``).outerHeight(true)	内容高度+内边距+边框	border+margin
+
+$(``).事件（fun(e){e.stopPropagation}）	阻止事件，阻止冒泡
+e.preventDefault	阻止默认行为
+回车键的keyCode=13
+keyCode表示你按了哪一个按键的编码
+
+删除节点
+$(``).remove()		删除调用的对象 删除自己
+$(``).parent().remove()	删除父元素
+
+事件委托
+$(`选择器`).on(`事件名`,fun(){})
+$(`祖先选择器`).on(`事件名`,`后代选择器`,fun(){})      回调函数中的this是触发事件的dom对象
+
+入口函数  页面资源加载完毕时执行的逻辑代码 资源加载完毕再执行
+window.onload=fun(){}	原生写法	
+$(window).on(`load`,fun(){}）	jq写法  		最保险的写法，会等待所有资源加载完毕
+$(doucument).ready(fun(){})	完整写法
+$(fun(){})			简化写法		dom元素加载完毕就会执行，等待时间更少
+
+轮播图插件  slick   下包 导包 用包		默认值	备注
+autoplay		轮播图效果自动执行		false	true/false
+arrows		是否显示翻页按钮		true	true/false
+prevArrow	自定义上一页按钮		无	标签选择器
+nextArrow	自定义下一页按钮		无	标签选择器
+dots		是否显示指示器		false	true/false
+appendDots	把点点显示器加到某个盒子里		标签选择器，jq对象
+
+先开头link导入slick.css和slick-theme.css
+再body上导入jQ.js和lick.js   ！！！注意先后顺序
+官方文档：https://github.com/kenwheeler/slick
+
+懒加载插件 lazyload  看不到的图片不加载，优化流量和加载速度
+下包 ，导包：先导入jq，再导入插件，再导入css(需要的话)	根据文档使用
+1，先sc导入jQueery  
+2.再sc导入lazyload.js
+3.图片的src属性名更改为data-original 类名改为lazyload
+4,找到希望懒加载的图片调用lazyload方法  //$(`.lazyload`).lazyload()
+官网： https://github.com/tuupola/lazyload/tree/1.x
+
+fullpage插件
+1，导入fullpage的css
+2，导入jQuery的js，再导入fullpage的js
+3，容器大div>小div，小div必须要有section的类名
+4.$(`#fullpage`).fullpage({})						默认值	参数
+navigation		是否显示导航				false	true/false
+navigationPosition		导航位置					right	left/right
+anchors			每个区域的锚链接名（刷新页面不回第一页）	[]	在地址栏
+afterLoad			区域加载完毕的会回调函数，有两个参数		无	参数：锚链接，索引
+
+日期选择器 日期插件 datepicker
+先导入日期选择器的css
+再导入JQ的JS，再导入datepicker的JS
+导入语言包的JS
+准备html结构<input type="text" class="datepicker" />
+插件调用方法 $('.datepicker').datepicker({}）	默认值	备注
+autoPick		是否自动选择当前日期	false	true/false
+autoHide		选择日期之后是否自动关闭	false	true/false
+language		语言模式			zh-CN	需要结合语言包使用（需要手动设置成zh-CN）
+官网文档：https://github.com/fengyuanchen/datepicker/blob/master/README.md
+
+表单验证插件validate,验证表单输入内容 表单插件，非空判断
+先导入JQ.js再导入validate.js
+ 用包$(`form`).validate({})					默认值	备注
+onBlur		失去焦点时验证				False	true/false
+onSubmit		提交表单时验证				true	true/false
+sendForm	是否提交表单，阻止表单默认行为				true	true/false
+valid		所有表单项验证通过执行的 回调函数		无	this是jQ对象
+invalid		至少一个表单项为通过验证时执行的 回调函数	无	this是jQ对象
+				无	Object
+自定义属性  （加到标签里）	含义				备注
+data-required		验证表单项不能为空			不需要值
+data-pattern		基于正则表达式验证			正则表达式       ！表单元素要放在form里面
+
+description	错误提示信息 
+data-describedby		指定显示错误信息的标签		标签的id
+data-description		指定错误信息的内容			和description中的属性对应  
+例子：
+<input
+            type="password"
+            name="password"
+            data-required
+            data-describedby="password-error"这个指向提示错误信息的标签
+            data-description="password" 	这个指向错误信息的内容
+ 	data-pattern=".{6,}"
+          />
+          <span class="error" id="password-error"></span> 这个标签的id为接收错误信息的id
+
+ $('form').validate({
+        description: {
+          password: {			这里写错信息的内容，会显示在接收错误信息的标签里
+            required: '密码不能为空!',	这个是内容为空时的提示信息
+            pattern: '密码不能少于6位!',	这个时正则不通过时的信息
+          },
+        },
+
+
+
+克隆方法
+.clone()		不带事件  返回的是JQ对象，可以使用JQ方法
+.clone(true)	带事件
+
+视频事件
+$(`video`).trigger(`play`)		播放视频
+$(`video`).trigger(`pause`)		暂停视频
+$(`from`).trigger(`reset`)		重置表单
+
+获取dom元素  可以直接使用dom方法  JQ中没有播放视频和重置表单，所以可以使用转为dom元素播放视频或者triggaer触发
+.get(索引)
+元素[索引]		将自己转为dom元素
+$(``)[0].reset()	dom操作重置表单
+
+快速获取表单数据，序列化 表单所有的值	表单全部信息
+$(`form`).serialize()
+表单元素要有name属性才可以获取到value值
+获取到的数据格式是name1=value1&name2=value2的字符串，用于前后端交互
+
+插件机制，插件时JQuery提供的扩展机制，本质是往JQuery原型对象上添加方法，因为原型链的存在，所以jq对象都可以用jq的方法
+JQuery.fn.extend({
+插件名(参数){逻辑}
+})
+
+$.each(数组，fun（下标，值）{})	遍历数组 循环数组
+$.map(数组，fun（值）{})		遍历并返回新的数组 
+还有其他的方法，但是更推荐原生的方法
+
+1.x 兼容ie，最后一个版本是1.12.4
+2.x不兼容ie。不在更新
+3.x不兼容ie，更新中

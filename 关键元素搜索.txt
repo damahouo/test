@@ -1,0 +1,495 @@
+18:00 2023/4/4
+ctrl + h 			全局查找加替换
+ctrl+G			跳转行数
+current			当前选择状态类名
+</br>			换行
+console.dir()		打印对象
+str.toUpperCase()		将字符串转换成大写
+
+overflow:hidden 		超出盒子隐藏
+display:none   		显示模式为空
+display：block 		显示模式为块（现形 配合hover）
+transition ：all 3S  		过渡模式s秒
+box-shadow 		阴影
+list-style: none; 		清楚li标签前面的点点
+text-decoration: none;	清楚a超链接的下划线
+position：fixed		固定定位
+text-decoration: line-through; 删除线
+placeholder		加在input里的提示字，默认显示，加标签里
+border-collapse: collapse; 	合并表格边缘线
+
+input :
+txet 		文本框输入单行文字
+password 	密码框
+radio		单选框，多选一，通过name值绑定
+checkbox		多选框，多选
+file 		文件选择，用于上传文件
+submit		提交按钮，用于提交  也是提交事件
+reset 		重置按钮     元素.reset() 重置表单
+button  		配合js使用 
+requirde		属性，非空的，必须输入 <input requirde> 输入内容不能为空
+change		改变事件 值内容发生变化时触发
+
+
+select 		下拉菜单标签
+option		下拉菜单选项
+
+
+outline :none   	选中时的深色显示线
+
+鼠标，光标类型：
+cursor：
+default	箭头
+pointer	小手
+text	工字型
+move	十字光标
+
+
+尾元素：：before ：：after 
+必须要加content : ' ' : 
+伪元素为行内模式，需要转模式
+才显示宽高
+清浮动和解决父子集都是块时，
+元素调用类为clearfix即可
+
+transform:translate   	位移元素
+
+transform: rotate（单位deg
+）旋转元素正数顺时针
+转，反之则逆
+
+transform：origin：		原点水平位置 原点垂直位置；属性改变转换原点 ，转换谁加在谁身上
+transform:scale(缩放倍数)；	缩放
+z-index:			整数   显示优先级
+
+opacity：0-1；		设置透明度
+
+
+background-image: linear-gradient(	背景渐变过渡透明
+                transparent,		起色为透明
+                rgba(0,0,0, .2)		末色为0.2透明度的黑色
+---------------------------------------------------背景图----------------------------------------------
+background :color      image    repeat        position  center
+   	       颜色       插图     -X/Y平铺      位置 	    居中（只写一个表示水平居中）
+背景图设置例子： background: url(./06-素材/images/desktop_1.jpg) no-repeat top center/cover;
+background-size: cover          contain
+                            覆盖全 	图片显示全部（可能会留白）
+body没有高度，那么就html加100%继承
+👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆
+
+👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇空间转换👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇
+
+transform-translate3D(x,y,z)		移动
+transform-rotate3D(x,y,z)		旋转
+transform-scale3D(x,y,z)		缩放 放大缩小 参数可以传数字
+transform-style:preserve-3D		使子元素位于3D空间内
+perspective			透视效果，加给父级 一般800-1200
+注  ：transform			属于复合属性，多次写会覆盖
+👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆
+
+---------------------------------------------------动画----------------------------------------------
+animation	：动画名称   动画时长   速度曲线   延长时间    重复次数        动画方向     执行完毕时状态
+     		         S	     linear           S           infinite           alternate     forwards      	 step（次）
+			    匀速		      无限次           反向执行     停留在末尾动画状态	 动画分几次执行
+--------------------------------------------------------------------------------------------------------------
+@keyframes 动画名称{
+	from{}
+	to{}
+		}
+
+@keyframes 动画名称{
+	0%{}
+	50%{}
+	100%{}
+		}
+
+flex-wrap:wrap 			flex弹性盒子换行模式
+flex：direction; 			弹性盒子更换主轴方向
+align-content: flex-start;		弹性盒子内容位置（换行后子集上下有间距时）
+
+------------------------------------------------------------------------
+在弹性盒子内，文字超宽度显示省略号设置模式：
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+给子集加：
+	text-overflow: ellipsis;
+    	white-space: nowrap;
+    	overflow: hidden;
+给父级加(若是给子集加宽度，则不用给父级加以下代码)：
+flex: 1;
+   	 width: 0;
+----------------------------------------------------------------------------
+
+媒体查询
+				
+@media(媒体特性) {
+选择器{样式}
+}
+
+类名选择器中两个.one.tow两个类名中间没有空格代表交集选择器，表示同时带有两个类名的元素
+
+<link rel="stylesheet" href="./two.css" media="(min-width:1200px)">
+媒体查询link引入写法
+
+
+ax-width 从大到小写 有层叠性
+
+数组名.length  	计算数组内元素个数
+
+mdn网站
+
+属性名 instanceof Array  判断属性名的属性值是否属于数组、Objice对象同理
+数组名.push	数组末尾新增增加元素，并返回新的数组元素数量，数组内追加元素
+数组名.unshift	数组开头新增增加元素，并返回新的数组元素数量
+数组名.pop 	删除数组最后一位元素，并返回被删除的元素值
+数组名.shift	删除数组第一位元素，并返回被删除的元素值
+数组名.splice(起始位置下标索引号,删除元素个数{不写会将起始位后面的元素全部删除})    
+
+
+冒泡排序 外层循环：
+let arr = [2, 3, 4, 1, 5, 9, 7]
+      //   外层循环控制一共要比较几次，比较arr.length-1次
+      for (let i = 0; i < arr.length - 1; i++) {
+        // 内层循环控制交换数据，交换次数为arr.length-1-i
+        for (let j = 0; j < arr.length - 1 - i; j++) {
+          if (arr[j] < arr[j + 1]) {
+            let temp = arr[j]
+            arr[j] = arr[j + 1]
+            arr[j + 1] = temp
+          }
+        }
+      }     
+
+arr.sort() 		
+promt	输入
+parseInt	保留整数
+parseFloat 保留浮点数
+定义函数时 return后面的代码不执行
+定义函数不定义返回值，函数的值为undifined
+
+arr.sort   数组排序
+
+立即执行函数2种写法
+1：  （function (形参){执行代码})(实参) ；  （用分号隔开，避免报错）
+2：  （fcunction(形参){执行代码}(实参)）；
+
+
+&&  ||  逻辑与，逻辑或，一假则假，一真则真 ，会造成逻辑终端，当前面的代码判断成功时，后面的代码则不会执行
+
+&&若两个代码都判断为真，会返回后面的代码
+||   一真则真，会返回判断的第一个为真的代码  会返回假的值
+！ 取反  ，真变假，假变真
+
+``,0,undefined,null,false,NaN  转换为布尔值后都是false,其余的都为真
+
+- 减号只能用于数字，会使空字符串转换为0，  null经过数字转换之后变为0，undefined经过数字转换之后会变为NaN
+
+num.toFoxed（2）   保留 2 几位小数方法
+随机生成N-M之间的随机数(包括N和M)
+function getRandom(N, M) {
+        return Math.floor(Math.random() * (M - N + 1)) + N
+      }
+
+返回数组内的最大值：
+function getMax(arr = []) {
+        function compareNumbers(a, b) {
+          return a - b
+        }
+        arrayNums.sort(compareNumbers)
+        return arrayNums[arrayNums.length - 1]
+      }
+
+Math.max(...arr)  求数组arr的最大值 求数组最大值
+
+元素名.classList.add（）   添加一个类名 添加类
+元素名.classList.remove（）  移除一个类名 删除类名
+元素名.classList.toggle（）   切换类名
+元素名.classList.contains()	看看有没有包含哪个类名，有就返回true，没有就返回flase 查看元素有没有哪个类名
+
+disabled  禁用标签吗？  true=禁用
+checked  勾选标签吗？   ture= 勾选
+
+data-属性名=`属性值`    自定义属性
+dataset.属性名     	     获取属性值
+
+document.querySelectorAll(`[name]`)     获取带有某个属性的元素 组！
+
+
+setInterval (函数名，时间)    	定时器 函数名不加小括号，时间单位为毫秒 1000ms=1s  会返回一个数值
+clearInterval(定时器的返回值)   关闭定时器
+重新开启定时器：  定时器的值=（函数，时间）  不用let 重新给定时器赋值
+开启定时器例：
+let  timeId = setInterval(function () {
+next.click()
+}, 1000))
+关闭定时器：claerInterval(timeId)
+重新开启定时器：
+timeId = setInterval(function () {
+next.click()
+}, 1000)
+
+setTimeout（回调函数，毫秒数）	开启延时器，返回一个数字，可以用 延迟函数
+clearTimeout(延时器返回的数字)，来关闭延时器   只执行一次
+
+click 	点击
+focus	获得焦点
+blur	失去焦点		
+mouseenter  鼠标进入事件
+mouseover   鼠标进入事件，有冒泡
+mouseleave  鼠标离开事件
+keydown	     键盘按下触发
+keyup	     键盘抬起触发键盘事件
+e. keyCode	获取按键的值判断你按了哪个键
+scroll 	    滑动事件
+mousemove	  鼠标移动事件
+ontimeupdate	事件在视频/音频当前的播放位置改变时触发   视频变化时
+onloadeddata	事件在当前帧的数据加载完成且还没有足够的数据播放的视频音频下一帧时触发   可以理解为视频一打开触发
+video.currentTime		视频播放的当前时间 视频当前播放时间
+video.play()	播放视频
+
+
+事件源.addEventListener (`事件`，事件处理函数)		事件监听、绑定、注册
+
+父集父盒子里再选带有某个类名的盒子： 父盒子.querySelector(`.类名`）
+
+str.trim() 	 	方法，去除字符串左右两面的空格
+textarea 		文本域
+
+.类名:checked 	选中该类名下具有checked属性的标签
+盒子.remove()	可以移除盒子删除盒子
+
+js更换背景图片：  .style.backgroundImage = `url(${图片地址对象})`
+
+当一个元素触发事件后，会依次向上调用所有父级元素的同名事件（点击，经过，或按键盘） 冒泡事件是默认存在的 ，事件 默认的是false 或者是默认冒泡
+e.stopPropagation()  e:事件对象， 阻止事件冒泡，也是阻止事件传播阻止冒泡
+对象名.removeEventListener(`事件`, 函数名)    ！匿名函数无法被解绑     事件解绑
+
+事件委托给父元素，e.target 检测点击哪一个元素， e.target.tagName 检测点击元素的标签  e是事件对象，内保存所点击的事件信息
+
+e.preventDefault()   阻止元素的默认行为 阻止默认行为
+或者return false
+
+window.addEventListener(`load`, function () {})        		 load加载事件：等待页面加载完毕后再执行回调函数  
+document.addEventListener(`DOMContentLoaded`,function(){})           	无需等待dom加载样式表，图像等完全加载完毕
+
+document.documentElement.scrollTop				获取页面被上卷曲的头部有多少像素，数字型，不带单位可读写，页面滚动专用
+
+ window.addEventListener(`resize`, function () {})			页面尺寸事件（了解即可
+
+e.pageX		鼠标在页面中的坐标
+
+offsetWidth  offsetHeight					得到元素内容+padding+border的宽高
+
+clientWight   clientHeight					得到元素可视范围宽高，不包边框，滚动条等
+
+offsetLeft  offsetTop					获取元素距离自己祖辈元素定位的左，上距离（元素距离边框的定位距离
+
+元素.getBoundingClientRect()				方法，返回元素的大小及其相对于视口的位置，用于的到盒子距离页面中的坐标 盒子在页面中的坐标   移动的距离= 鼠标在页面的坐标-盒子离页面视口的坐标
+
+
+
+============================================总结===========================================
+
+                             属性                                                  作用                                             说明
+	scrollLeft/scrllTop          	     被卷去的头部和左侧                  		配和页面滚动使用，可读写
+
+	clienWidth/clientHeight	     获得元素的高度和宽度	 		不包含border，margin，滚动条 用于js获取元素大小
+
+	offsetWidth/offsetHeight	     获得元素的高度和宽度		 	包含border，padding，滚动条等，同上，只读
+
+	offsetLeft/offsetTop		     获得元素距离自己定位父元素的左上距离       	获取元素位置时使用，只读属性
+
+自己执行函数，防止变量污染：   （function（）{}）（）；
+
+html  {scroll-behavior: smooth;}  	让滚动条添加滑动效果，而不是跳动
+
+                            const date = new Date()   时间实例化
+date.toLocaleString()		获得年份+时间  获得当前时间    ！！！
+date.toLocaleDateString()		获得年月日  
+date.toLocaleTimeString()		获得时间
+date.getFullYear()			获取年
+date.getMonth()			获取月
+date.getDate()			获取日
+
+可以通过传入时间字符串，通过new Date 方法获得中国标准时间
+例：new Date(2019-10-21T19:59:44.000Z) =Tue Oct 22 2019 03:59:44 GMT+0800 (中国标准时间)
+再通过Tue Oct 22 2019 03:59:44 GMT+0800 (中国标准时间).toLocaleString()=2019/10/22 03:59:44
+
++new Date(2023-5-1 12：00：00)	获得指定时间的时间戳，括号内不写则是获得当前的时间戳
+date.getTime()			获得时间戳，需要先实例化
+Date.now()			只能获得当前的时间戳
+
+.parentNode			查找父节点 父亲
+.children				查找所有的子节点 儿子 
+.nextElementSibling			下一个兄弟节点
+.previousElementSibling		上一个兄弟节点
+
+document.createElement(`li`)		创建一个li标签，加引号 也是li标签 创建标签
+父元素.appendChild(li)		将li元素追加到父元素中最后一个子元素的位置
+父元素..insertBefore（要追加的元素，放在哪一个元素前面）   追加一个节点到父元素中哪一个元素前面
+
+元素.cloneNode（布尔值）		克隆节点
+true 		表示深克隆，节点内的所有东西一起克隆
+false		表示浅克隆，只克隆标签，不克隆内容
+
+移动端触摸事件
+touchstart	开始触摸
+touchend		结束触摸
+touchmove	触摸移动
+
+autocomplete="off"	表单记忆模式 不记录上次输入数据
+event loop 		事件循环
+
+location.href=``		页面会跳转到写的链接里
+location.reload()		刷新 括号内传入true 为强制刷新==ctrl+F5S
+search 属性		获取地址中携带的参数，符号？后面的内容
+hash  属性		获取地址中的哈希值，符号#后面的内容
+
+// 检测 userAgent（浏览器信息检测打开方式是pc还是移动端）
+!(function () {
+const userAgent = navigator.userAgent
+// 验证是否为Android或iPhone
+const android = userAgent.match(/(Android);?[\s\/]+([\d.]+)?/)
+const iphone = userAgent.match(/(iPhone\sOS)\s([\d_]+)/)
+// 如果是Android或iPhone，则跳转至移动站点
+if (android || iphone) {
+location.href = 'http://m.itcast.cn' }
+})()
+
+histroy.go(参数)		参数为1 是前进一步，-1是后退一步
+
+localStorage.setItem(`键`,`值`)		本地存储数据，只能存储字符串，数字存入时，取出会被转换为字符串
+localStorage.getItem(`键`)		本地查数据
+localStorage.removeItem(`键`)		本地删除
+JSON.stringify()			把复杂数据类型转换为json数据类型
+JSON.parse(JSON数据)		把JSON文件格式转换为对象数据模式
+
+arr.filter(function (item，i){数据处理函数}),主要是筛选数组，内可以写比较运算符，返回的是符合条件的新数组，箭头函数只有一行的时候可以省略return，i是序列号，也可以省略
+arr.forEach(function (item，i){数据处理函数}) 主要是遍历数组，当前元素必写，索引号可以省略  不返回值，加强版的for循环
+arr.map(function (item，i) {数据处理函数}		item是数组arr里的每一个元素，i是元素下标索引，map方法会将每一个元素进行数据处理函数，将返回值返回一个新数组内
+arr.join(`参数`)			将数组内的元素转换为一个字符串，并用参数作为分隔符分割
+
+const reg = /规则/			正则表达式定义规则
+reg.test(被检测的字符串)		检测字符串是否匹配，返回一个布尔值
+reg.exec(被检测的字符串)		检索符合规则的字符串，有返回数组，没有返回null
+
+^	表示匹配行首的文本以谁开始
+$ 	表示匹配行尾的文本以谁结束
+*	重复零次或更多次
++	重复一次或更多次
+？	重复零次或一次
+{n}	重复n次
+{n,}	重复n次或更多次
+{n,m}	重复n-m次
+\d	匹配0-9之间的任一数字，相当于0-9
+\D	匹配所有0-9以外的字符，相当于[^0-9]
+\w	匹配任意的字母，数组和下划线，相当于[A-Za-z0-9_]
+\W	匹配所有字母，数字和下划线以外的字符 ，相当于[^A-Za-z0-9_]
+\s	匹配空格（包括换行符，制表符，空格符等），相当于[\t\r\n\v\f]
+\S	匹配非空格的字符，相当于[^\t\r\n\v\f]
+//i	修饰的意思，表示匹配时不区分大小写（ignore）
+//g	修饰的意思，表示匹配所有满足正则表达式的结果 （global）
+字符串.replace(/正则表达式/，`替换的文本`)	替换文本 只差找一次，加g修饰可以全局查找替换，有一个返回值，不会修改原来的字符串	正则表达式内加  |  意思是或的意思
+/^1(3\d|4[5-9]|5[0-35-9]|6[567]|7[0-8]|8\d|9[0-35-9])\d{8}$/	手机号验证
+/^\d{6}$/			六位数验证码验证
+/^[a-zA-Z0-9-_]{6,20}$/	六到20位密码验证
+
+arguments，动态参数，只存在于函数内，是个伪数组，装着函数传入的参数
+...剩余参数，剩余参数是个真数组
+...展开运算符，写在数组前，将数组展开 
+
+内置构造函数
+Object       .kesy(对象) 可以获得对象中所有属性（键）返回的是数组形式
+	\.values,获取所有的值
+	.assign（oo,o）,拷贝，把o拷贝放入oo，可以理解为追加，或者添加，会直接修改原对象
+Array      .forEach   		遍历数组
+	.filter		筛选过滤数组
+	.map		加工数组
+	.reduce    		(累计器，返回累计处理的结果，经常用于数组求和)
+	arr.reduce(function(上一次的值prev，当前值item{}，初始值)，需要return返回结果
+·	如果有起始值，则起始值作为上一次值开始循环累加，没有就是数组内第一个值作为上一次值
+	.find		查找元素，返回符合测试条件的第一个数组元素值，若没有符合条件的则返回undefined
+	arr.find((item) => item.name === `鸡哥`)，查找符合name是鸡哥的元素并返回这个元素
+	.every		检测数组所有元素是否符合指定条件，如果所有元素都通过检测返回true,否则返回false
+	arr.every((item) => item.name === `鸡哥`)//false or true 
+                 join		数组元素拼接为字符串，返回字符串	
+                 some		检测数组中的元素是否满足指定条件，如果数组中有元素满足条件返回true，否则返回false
+                 concat		合并两个数组，返回生成新数组
+                 sort		对原数组单元值排序
+                 splice		删除或替代原数组单元
+                 reverse		反转数组
+                 findIndex		查找元素的索引值
+                 Array.from	伪数组转换为真数组
+
+String
+	实例方法
+	.split(`分隔符`)      用分隔符将字符串转换为数组   join（`分隔符`） 数组转换为字符串
+	.substring(开始索引号，结束索引号可以省略）	            截取字符串，包头不包尾
+	.startsWith(searchString[,position])          判断字符是不是以某字符开头，默认位置是开头0，返回布尔值
+	.includes            判断一个字符串是否包含在另一个字符串中，返回布尔值 默认位置是字符开头0
+	（了解）
+	.toUpperCase 	用于将字母转换成大写
+	.toLowerCase	用于将字母转换成小写
+	.indexOf		检测是否包含某字符
+	.endsWith		检测是否以某字符结尾
+	.replace		用于替换字符串，支持正则匹配
+	.match		用于查找字符串，支付正则匹配
+	.toString()	将内容转换为字符串
+	静态方法
+	String（被转换的内同）	将元素转换位字符串
+Number
+	.toFixed(X)	将数字精确到X位小数，四舍五入，不写x则取整
+
+原型对象
+构造函数.prototype.属性=方法		给构造函数的prototype属性赋值属性名和方法，避免浪费内存，其方法中的this指向实例化对象
+constructor   ：构造函数里.prototype（原型对象里的属 性，指向构造函数）
+__proto__,实例对象的实例原型叫作对象原型，指向构造函数的原型对象  浏览器中显示[[prototype]],里面也有constructor,指向创建实例对象的构造函数
+
+Str.prototype.constructor === Str	//true   
+str.__proto__.constructor === Str	//true                 Str表示构造函数，str表示构造函数的实例化对象 ===表示指向
+str.__proto__ === Str.prototype 	//true
+
+浅拷贝 单层对象没问题，多层对象会有问题
+Objiect.saagin()/展开运算符{...obj}拷贝对象
+Array.prototype.concat()或者[...arr]拷贝数组
+
+lodash 插件，先引用，再使用 
+_.cloneDeep()深拷贝   
+JOSN深拷贝
+
+throw 	抛异常 程序会中断
+throw new Error ()
+
+try {} 	     可能错误的代码写在try里面
+catch(err){}   捕获到异常信息，err.message 是捕获到的异常信息
+finally{} 	     里面的代码不管有没有捕获到异常信息都会执行
+
+改变this指向
+call()		调用函数时.call()     例子：fun.call(this指向，形参，形参...)
+apply（）		调用函数时.apply()  例子：fun.apply(this指向，[参数必须以数组形式传递])，使用场景，求数组最大值
+		Math.max.apply(this指向，一般为空null，[求最大或最小值的数组])
+bind()		不会调用函数改变this指向，fn.bind(this指向)不会调用函数，有返回值，返回值是原函数的拷贝函数this已经更改的函数
+总结
+相同点 都可以改变this指向
+区别点 call和aplly会调用函数，并且改变this指向
+	call和aplly穿的参数不一样，call内部传递的参数是1，2，3形式，apply必须是数组的形式
+	bind不会调用函数，可以改变函数的this指向
+主要应用场景
+	call调用函数并且可以传递参数
+	apply经常跟数组有关系，比如借助于数学对象实现数组的最大值最小值
+	bind不调用函数，但是还想改变this指向，比如改变定时器内部的this指向
+
+防抖 	debounce单位时间内频繁触发事件，只执行最后一次  		 搜索框输入，手机号，邮箱验证输入检测
+  Lodash插件：	 _.debounce(fun,时间) 效果：停止对应时间，再执行函数
+要写在事件监听的函数里，不能写在中间
+手写防抖核心是
+利用定时器实现
+每次事件触发时先判断是否有定时器，有就清除旧定时器
+没有就开启定时器
+定时器里写函数调用
+
+节流：throttle 	单位时间内频繁触发事件，只执行一次（针对高频事件） 	高频鼠标移动，页面尺寸缩放 滚动条滚动
+		_.throttle(fun,时间)  规定时间内只执行一次函数
