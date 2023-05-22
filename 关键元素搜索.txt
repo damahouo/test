@@ -13,6 +13,7 @@ transition ：all 3S  		过渡模式s秒
 box-shadow 		阴影
 list-style: none; 		清楚li标签前面的点点
 text-decoration: none;	清楚a超链接的下划线
+<a href="javascript:;">2021</a>	阻止a链接点击跳动添加href=  javascript:;
 position：fixed		固定定位
 text-decoration: line-through; 删除线
 placeholder		加在input里的提示字，默认显示，加标签里
@@ -147,7 +148,8 @@ mdn网站
 数组名.pop 	删除数组最后一位元素，并返回被删除的元素值
 数组名.shift	删除数组第一位元素，并返回被删除的元素值
 数组名.splice(起始位置下标索引号,删除元素个数{不写会将起始位后面的元素全部删除})    
-
+字符串.replace() 字符串替换
+数组.join(`\r\n`)		将数组转换成字符串，且换行  \r\n表示换行
 
 冒泡排序 外层循环：
 let arr = [2, 3, 4, 1, 5, 9, 7]

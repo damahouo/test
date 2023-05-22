@@ -1,0 +1,131 @@
+cmd  node -v 查看node版本号确认node是否安装成功
+1,打开终端
+cd + 文件路径		切换到次路径下
+2，输入node js文件名 	在node环境中执行js
+
+shift + 右键单击  		在此目录下打开cmd终端，且直接定位到该目录下
+↑   			执行上一次的命令
+tab			快速补全文件名
+esc			快速清空当前输入的命令
+cls			快速清空终端的命令
+
+fs模块 操作文件的模块
+const fs = require(`fs`)	先导入fs模块
+fs.readFile(path[,options],callback)		  参数1path表示文件路径
+					  参数2 表示编码格式
+					  参数3   calback表示回调函数，传入两个参数， err表示失败的结果,dataStr表示成功的结果
+						失败时err为失败对象，dataStr为undefined
+						成功时err为null，dataStr为读取的内容
+fs.writeFile(file,data[,options],callback)		参数1 制定一个文件路径的字符串，表示文件的存放路径
+					参数2 表示要写入的内容
+					参数3 可选参数 表示以什么格式写入文件内容 默认时utf8
+					参数4 回调函数，有1个参数 err	 如果err的值为null表示写入成功，失败时为错误对象
+
+使用fs操作文件时 使用相对路径时可能出现路径动态拼接错误的问题，可使用绝对路径避免此问题（但会带来移除性差和维护性差的问题）
+
+path 模块 处理路径的模块
+const path = require(`path`)	使用前先导入path模块
+path.join(``,``,``,``)		将多个路径片段拼接完成一个完整的路径字符串 有返回值，返回拼接好的新路径
+	填写路径时 用  path.join(__dirname,`相对路径`） 来拼接路径避免路径动态拼接的 问题
+	填写路径时 用  path.join(__dirname,`相对路径`） 来拼接路径避免路径动态拼接的 问题
+	填写路径时 用  path.join(__dirname,`相对路径`） 来拼接路径避免路径动态拼接的 问题
+path.basename(path[,ext] )		用来从多个字符串中，将文件名解析出来
+				path 必选参数，表示一个路径的字符串
+				ext  可选参数，传入文件的扩展名 有这个参数时，返回值会将文件扩展名去掉
+				有返回值，表示路径中最后一部分
+path.extname(path)			获取路径中扩展名部分
+
+http模块，官方提供的创建web服务器的模块，把电脑变成服务器        普通电脑通过安装web服务器软件 iis Apache 服务器软件将电脑变成服务器
+const  http = require(`http`)  		导入模块
+ip地址 每台计算机的唯一地址  域名对应id   域名和id的转换关系存在于域名服务器
+
+创建基本的web服务器
+1，导入http模块					const  http = require(`http`)  
+2，创建web服务器实例				const server = http.createServer()
+3，为服务器实例绑定request事件，监听客户端的请求	server.on(`request`,(req,res)=>{console.log(`someone `)}
+4，启动服务器					server.listen(80,()=>{}
+ctrl + c 	停止服务器
+res.end()		向客户端发送请求内容
+ res.setHeader(`Content-Type`,`text/html; charset=utf-8`)	设置res的请求头。防止中文乱码
+
+
+根据不同的url相应不同的html内容
+案例：
+// 导入http模块
+const http = require(`http`)
+// 导入fs模块
+const fs = require(`fs`)
+// 导入path模块
+const path = require(`path`)
+// 构建服务器实例
+const server = http.createServer()
+// 监听请求事件
+server.on(`request`, (req, res) => {
+  // 将请求的url地址设置成一个常量
+  const url = req.url
+  // 根据请求的url地址，映射到本地的文件路径
+  const fpath = path.join(__dirname, url)
+// 根据映射的本地文件路径读取文件内容，读取成功后发送回客户端
+  fs.readFile(fpath, `utf8`, (err, dataStr) => {
+    if (err) return res.end(`404 Not found.`)
+    res.end(dataStr)
+  })
+})
+// 表示正在监听80端口
+server.listen(80, () => {
+  console.log(`server sunning at http://127.0.0.1`);
+})
+
+
+使用require 方法加载其他模块时，会执行被加载模块中的代码，加载用户自定义模块期间，可以省略.js的后缀名
+模块作用域和函数作用域类似，在自定义的模块中定义的变量，方法等成员，只能在当前模块内被访问，这种模块级别的访问限制，叫做模块作用域
+每个.js自定义模块都有一个module对象，里面存储和当前模块有关的相关信息
+module.exports对象  将模块内的对象共享出去供外部使用，外界用require()方法导入自定义模块时，得到的module.exports指向的对象
+
+exports ===module.exports 指向同一个对象	时刻谨记，使用require()导入模块时，得到的永远是module.exports指向的对象，exports无法覆盖module.exports对象  为防止混乱，同一个模块中，不建议同时使用exports和module.exports
+
+CommonJS规定
+1，每个模块内部，module变量代表当前模块
+2，module变量是一个对象，他的exports属性(即module.exports)时对外的接口
+3，加载某个模块，其实是加载该模块的module.exports属性，require()方法用于加载
+
+https://www.npmjs.com/  全球最大的包共享平台  
+https://registry.npmjs.org/服务器，提供下包的服务器
+
+在项目中安装包的命令 npm install 包的完整名称  npm i 包的完整名称
+1，在项目的终端内下载    moment 时间包  可以在包的名之后@版本号，根据指定版本号下载包
+
+如果某些包只在项目开发阶段会用到，在项目上线之后不会用到，则建议把这些包记录到 devDependencies 节点中。
+与之对应的，如果某些包在开发和项目上线之后都需要用到，则建议把这些包记录到 dependencies 节点中。
+可以使用以下命令，将包记录到devDependencies 
+npm i 包名 -D		安装指定的包，并记录到 devDependencies 节点中
+
+切换npm下包镜像源 
+1，查看当前的下包镜像源 
+npm config get registry
+2, 将下包的镜像源切换为淘宝镜像源  （官方地址为https://registry.npmjs.org/）
+npm config set registry=https://registry.npm.taobao.org/
+3,检查镜像源是否下载成功
+npm config get registry
+
+为了更方便的切换下包的镜像源，我们可以安装 nrm 这个小工具，利用 nrm 提供的终端命令，可以快速查看和切换下
+包的镜像源。
+1，通过npm包管理器，将nrm安装为全局可用的工具
+npm i nrm -g
+2，查看所有可用的镜像源
+nrm ls
+3，将下包的镜像源切换为淘宝镜像、
+nrm use taobao
+
+⚫ 开发依赖包（被记录到 devDependencies 节点中的包，只在开发期间会用到）
+⚫ 核心依赖包（被记录到 dependencies 节点中的包，在开发期间和项目上线之后都会用到
+在执行 npm install 命令时，如果提供了 -g 参数，则会把包安装为全局包。
+全局包会被安装到 C:\Users\用户目录\AppData\Roaming\npm\node_modules 目录下。
+npm uninstall 包名 -g 卸载全局包
+只有工具性质的包，才有全局安装的必要性
+
+i5ting_toc 是一个可以把 md 文档转为 html 页面的小工具，使用步骤如下：
+1，将 i5ting_toc 安装为全局包
+npm install -g i5ting_toc
+2,调用i5ting_toc，轻松实现md转html 的功能
+i5ting_toc -f 要转换的md文件的路径 -o 

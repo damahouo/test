@@ -320,26 +320,42 @@ Accept-Language		用户期望获得的自然语言的优先顺序
 
 
 -------------------------------git---------------------------
-git init 		初始化git仓库
-git status 或 git status -s 查看文件状态
+git init 			初始化git仓库
+git status 或 git status -s 	查看文件状态
 		？？	未跟踪
 		红M	已修改，未放暂存区
 		绿M 	已修改，已放暂存区
 		A	新添加到了暂存区
 		绿D	该文件已标记移除，将从git仓库移除
-git add.		一次性将文件加入暂存区 不加点加文件名表示只添加一个文件到暂存区
-git commit -m“”	提交更新，并附加描述信息
-git checkout -- 文件名 撤销对文件修改，一旦撤销无法恢复，慎用
-git reset HEAD	一次性将所有文件移除暂存区
-git commit -a -m	跳过添加暂存区步骤，所有文件直接暂存并提交
-git rm -f 文件名	从git仓库和工作区一并移除文件
+git add.			一次性将文件加入暂存区 不加点加文件名表示只添加一个文件到暂存区
+git commit -m“”		提交更新，并附加描述信息
+git checkout -- 文件名 	撤销对文件修改，一旦撤销无法恢复，慎用
+git reset HEAD		一次性将所有文件移除暂存区
+git commit -a -m		跳过添加暂存区步骤，所有文件直接暂存并提交
+git rm -f 文件名		从git仓库和工作区一并移除文件
 git rm --cached 文件名	只从git仓库移除文件
-.gitignore文件	里面写忽略的文件名 加/表示是文件夹 支持正则匹配
+.gitignore文件		里面写忽略的文件名 加/表示是文件夹 支持正则匹配
 
-git log 列出所有提交历史
-git log -2		列出提交历史并只看两条
-git log --pretty=onelin  一行展示所有提交历史
-git rest --hard<id> 退回到指定id版本
-git refflog --pretty=online 在退回到旧版本中时查看所有的历史更新记录 再执行回到指定id版本中即可
+git log 			列出所有提交历史
+git log -2			列出提交历史并只看两条
+git log --pretty=onelin  	一行展示所有提交历史
+git rest --hard<id> 		退回到指定id版本
+git refflog --pretty=online 	在退回到旧版本中时查看所有的历史更新记录 再执行回到指定id版本中即可
+git clone			创建远程仓库到本地
+git branch		查看分支列表，*表示当前所在分支
+git branch 分支名		创建新的分支，但是还处在当前分支上
+git checkout 分支名		切换分支
+git checkout -b		创建并切换到新的分支上
+合并分支
+1，先切换到主分支上
+2，git merge 分支名
+3，手动解决冲突
+4，git add . -> git commit -m ""再提交即可
+git push -u 远程仓库名 本地分支名：远程分支名	推送分支到远程仓库，第一次带 -u 之后直接git push 即可
+git remote show 远程仓库名  	查看远程分仓库的分支
+git checkout 分支名		把远程仓库分支下载到本地
+git pull			从远程仓库拉取最新的代码保存到本地分支内
+git push 远程仓库名 --delete 分支名   	删除远程仓库的分支
+远程仓库名默认名 origin
 
  		 

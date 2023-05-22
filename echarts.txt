@@ -1,0 +1,10 @@
+1，下载并引入echarts.js
+2，准备一个有宽有高的dom容器
+3，初始化echarts实例对象         const  myChart =  echarts.init(选择器，选择dom元素)
+4，指定配置项和数据（option）
+5，将配置项给echarts实例对象   myChart.setOption(option)   //此行为相当于在页面上渲染出option内的数据，但数据发生改变时需要重新调用渲染页面
+
+//让图表和窗口一起适配
+window.addEventListener(`resize`, function () {
+    myChart.resize()
+  })
