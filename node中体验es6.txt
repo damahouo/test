@@ -1,0 +1,93 @@
+node.js 中默认仅支持 CommonJS 模块化规范，若想基于 node.js 体验与学习 ES6 的模块化语法，可以按照
+	如下两个步骤进行配置：
+① 确保安装了 v14.15.1 或更高版本的 node.js
+② 在 package.json 的根节点中添加 "type": "module" 节点
+	ES6 的模块化主要包含如下 3 种用法：
+① 默认导出与默认导入
+② 按需导出与按需导入
+③ 直接导入并执行模块中的代码
+默认导出的语法： export default 默认导出的成员
+默认导入的语法： import 接收名称 from '模块标识符'    导入模块要加js后缀
+每个模块中，只允许使用唯一的一次 export default，否则会报错！
+默认导入时的接收名称可以任意名称，只要是合法的成员名称即可
+按需导出的语法： export 按需导出的成员
+按需导入的语法： import { s1 } from '模块标识符'     导入时不能使用` `  会报错  要使用‘’ 并且加后缀
+     	 按需导出与按需导入的注意事项
+① 每个模块中可以使用多次按需导出
+② 按需导入的成员名称必须和按需导出的名称保持一致
+③ 按需导入时，可以使用 as 关键字进行重命名
+④ 按需导入可以和默认导入一起使用  import info, { s1 ,s2,say}  from  './03.按需导出.js' 。 此处的info表示默认导出挂载的对象
+	如果只想单纯地执行某个模块中的代码，并不需要得到模块中向外共享的成员。此时，可以直接导入并执行模
+块代码，示例代码如下：  直接导入模块即可 模块内不需要导出任何共享成员
+
+① Promise 是一个构造函数
+⚫ 我们可以创建 Promise 的实例 const p = new Promise()
+⚫ new 出来的 Promise 实例对象，代表一个异步操作
+② Promise.prototype 上包含一个 .then() 方法
+⚫ 每一次 new Promise() 构造函数得到的实例对象，
+⚫ 都可以通过原型链的方式访问到 .then() 方法，例如 p.then()
+③ .then() 方法用来预先指定成功和失败的回调函数
+⚫ p.then(成功的回调函数，失败的回调函数)
+⚫ p.then(result => { }, error => { })
+⚫ 调用 .then() 方法时，成功的回调函数是必选的、失败的回调函数是可选的
+
+由于 node.js 官方提供的 fs 模块仅支持以回调函数的方式读取文件，不支持 Promise 的调用方式。因此，需
+要先运行如下的命令，安装 then-fs 这个第三方包，从而支持我们基于 Promise 的方式读取文件的内容：
+如果上一个 .then() 方法中返回了一个新的 Promise 实例对象，则可以通过下一个 .then() 继续进行处理。通
+过 .then() 方法的链式调用，就解决了回调地狱的问题。  实例代码如下：
+import thenFs from 'then-fs'
+thenFs.readFile('./files/1.txt', 'utf8').then(r1 => {
+  console.log(r1);
+  return thenFs.readFile ('./files/2.txt','utf8')
+}).then(r2 => {
+  console.log(r2);
+  return thenFs.readFile('./files/3.txt','utf8')
+}).then(r3 => {
+  console.log(r3);
+})
+
+在 Promise 的链式操作中如果发生了错误，可以使用 Promise.prototype.catch 方法进行捕获和处理：
+import thenFs from 'then-fs'
+thenFs.readFile('./files/11.txt', 'utf8')  .catch(err => {          //在此处捕获没有11.txt这个文件的错误 不会影响以后的文件读出
+  console.log(err.message);
+}).then(r1 => {
+  console.log(r1);
+  return thenFs.readFile ('./files/2.txt','utf8')
+}).then(r2 => {
+  console.log(r2);
+  return thenFs.readFile('./files/3.txt','utf8')
+}).then(r3 => {
+  console.log(r3);
+})
+
+Promise.all() 方法会发起并行的 Promise 异步操作，等所有的异步操作全部结束后才会执行下一步的 .then 
+操作（等待机制）
+Promise.race() 方法会发起并行的 Promise 异步操作，只要任何一个异步操作完成，就立即执行下一步的
+.then 操作（赛跑机制）。
+
+
+async/await 是 ES8（ECMAScript 2017）引入的新语法，用来简化 Promise 异步操作。在 async/await 出
+现之前，开发者只能通过链式 .then() 的方式处理 Promise 异步操作，使用 async/await 简化 Promise 异步操作的示例代码如下：
+import thenFs from 'then-fs'
+
+async function getALLFile() {
+  const r1 = await thenFs.readFile('./files/1.txt', 'utf8')
+  console.log(r1);
+  const r2 = await thenFs.readFile('./files/2.txt', 'utf8')
+  console.log(r2);
+  const r3 = await thenFs.readFile('./files/3.txt', 'utf8')
+  console.log(r3);
+}
+
+getALLFile()
+
+	async/await 的使用注意事项
+① 如果在 function 中使用了 await，则 function 必须被 async 修饰
+② 在 async 方法中，第一个 await 之前的代码会同步执行，await 之后的代码会异步执行
+
+每一个宏任务执行完之后，都会检查是否存在待执行的微任务，
+如果有，则执行完所有微任务之后，再继续执行下一个宏任务。
+
+
+
+

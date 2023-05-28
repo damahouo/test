@@ -1,0 +1,233 @@
+MYSQL Server  专门用来提供数据存储和服务的软件
+MYSQL Workbench 可视化的管理工具
+DataType 数据类型：
+① int 整数
+② varchar(len) 字符串
+③ tinyint(1) 布尔值
+字段的特殊标识：
+① PK（Primary Key）主键、唯一标识
+② NN（Not Null）值不允许为空
+③ UQ（Unique）值唯一
+④ AI（Auto Increment）值自动增长
+
+2. SQL 能做什么
+① 从数据库中查询数据
+② 向数据库中插入新的数据
+③ 更新数据库中的数据
+④ 从数据库删除数据
+⑤ 可以创建新数据库
+⑥ 可在数据库中创建新表
+⑦ 可在数据库中创建存储过程、视图
+⑧ etc
+
+重点掌握如何使用 SQL 从数据表中：
+查询数据（select） 、插入数据（insert into） 、更新数据（update） 、删除数据（delete）
+额外需要掌握的 4 种 SQL 语法：
+where 条件、and 和 or 运算符、order by 排序、count(*) 函数
+
+
+SELECT 语句用于从表中查询数据。执行的结果被存储在一个结果表中（称为结果集）：
+SELECT * FROM 表的名称 	*从表中查询所有的列
+SELECT  列名称 FROM 表名称	查询固定列
+
+INSERT INTO 语句用于向数据表中插入新的数据行，语法格式如下
+insert into 表名称 table_name (列1，列2.。。) values（值1，值2.。。。）
+
+Update 语句用于修改表中的数据。语法格式如下：
+update 表名称 set 列名称 = 新值 where 列名称 = 某值
+
+delete 删除数据   删除一定要谨慎再谨慎
+delete from users where id= 4
+
+AND 和 OR 可在 WHERE 子语句中把两个或多个条件结合起来。
+AND 表示必须同时满足多个条件，相当于 JavaScript 中的 && 运算符，例如 if (a !== 10 && a !== 20)
+OR 表示只要满足任意一个条件即可，相当于 JavaScript 中的 || 运算符，例如 if(a !== 10 || a !== 20)
+
+
+ORDER BY 语句用于根据指定的列对结果集进行排序。
+ORDER BY 语句默认按照升序对记录进行排序。
+如果您希望按照降序对记录进行排序，可以使用 DESC 关键字。  asc表示升序 默认升序
+select * from users order by id desc ,多重排序
+
+COUNT(*) 函数用于返回查询结果的总数据条数，语法格式如下：
+select  count(*) from 表名称
+
+如果希望给查询出来的列名称设置别名，可以使用 AS 关键字，示例如下
+select count(*) as aaa from users where status = 0
+select username as uname,password as pwd from users
+
+4.1 在项目中操作数据库的步骤
+① 安装操作 MySQL 数据库的第三方模块（mysql）
+② 通过 mysql 模块连接到 MySQL 数据库
+③ 通过 mysql 模块执行 SQL 语句
+
+1. 安装 mysql 模块
+mysql 模块是托管于 npm 上的第三方模块。它提供了在 Node.js 项目中连接和操作 MySQL 数据库的能力。
+想要在项目中使用它，需要先运行如下命令，将 mysql 安装为项目的依赖包 npm i mysql
+1, npm init -y
+2,npm i mysql2
+
+2. 配置 mysql2 模块
+在使用 mysql 模块操作 MySQL 数据库之前，必须先对 mysql 模块进行必要的配置，主要的配置步骤如下：
+1,导入mysql模块
+const mysql = require(`mysql2`)
+2,建立于mysql 数据库的链接
+const db = mysql.createPool({
+host:`127.0.0.1`,  		//数据库的ip地址
+user:`root`,		//登陆数据库的账号
+password:`123456`,		//登陆数据库的密码
+database:`my_db_01`	//指定要操作哪个数据库
+})
+
+3. 测试 mysql 模块能否正常工作
+调用 db.query() 函数，指定要执行的 SQL 语句，通过回调函数拿到执行的结果
+// 测试mysql模块能否正常工作
+db.query(`select 1`, (err, results) => {
+  // mysql模块工作期间报错了
+  if (err) return console.log(err.message);
+  // 能供成功的执行语句
+  console.log(results);
+})
+
+4 查询数据库数据 定义一个查询语句 调用query   执行的结果是一个数组
+db.query(`select * from users`,(err,results)=>{
+if (err) return console.log(err.message)
+console.log(results)
+})
+
+5，插入数据
+// 向users表中新增数据 username = Spider_Man  password = pcc123
+const user = { username: `Spider_Man`, password: `pcc123` }
+const sqStr = `insert into users(username,password) values(?,?)` //此处的问号表示占位符
+// 执行sql语句
+db.query(sqStr, [user.username, user.password], (err, results) => {  //在此处插入占位符占位的数据
+  if (err) return console.log(`插入数据失败` + err.message);
+  // 成功了的话
+  // 注意，执行的是insert into 插入语句，则results 是一个对象
+  if (results.affectedRows === 1)   // 这个判断数据是否插入成功
+    console.log(`插入数据成功`);
+})
+
+3. 插入数据的便捷方式
+向表中新增数据时，如果数据对象的每个属性和数据表的字段一一对应，则可以通过如下方式快速插入数据：
+// 便捷方式
+// 向users表中新增数据 username = Spider_Man  password = pcc123
+const user = { username: `Spider_Man2`, password: `pcc12322` }
+const sqStr = `insert into users set ?` //此处的问号表示占位符
+// 执行sql语句
+db.query(sqStr, user, (err, results) => {  //在此处插入占位符占位的数据
+  if (err) return console.log(`插入数据失败` + err.message);
+  // 成功了的话
+  // 注意，执行的是insert into 插入语句，则results 是一个对象
+  if (results.affectedRows === 1)
+    console.log(`插入数据成功`);
+})
+
+// 更新数据 
+const user = {id : 6, username: `aaa`, password: `123321` }
+// 定义sql语句
+const sqlStr = `update users set username=? ,password=? where id =?`
+db.query(sqlStr, [user.username, user.password,user.id], (err,results)=> {
+  if (err) return (`数据更新失败` + err.message)  
+  if (results.affectedRows === 1) {
+    console.log(`更新成功`);
+  }
+})
+
+// 更新数据便捷方式
+const user = {id : 6, username: `aaa1`, password: `1213321` }
+// 定义sql语句
+const sqlStr = `update users set ?  where id =?`
+db.query(sqlStr, [user,user.id], (err,results)=> {
+  if (err) return (`数据更新失败` + err.message)  
+  if (results.affectedRows === 1) {
+    console.log(`更新成功`);
+  }
+})
+
+// 删除数据尽量使用id删除数据 删除id=5 的用户
+const sqlStr = `delete from users where id=?`   //只有一个占位符的话，下面的数组可以省略 只写一个6
+db.query(sqlStr, 6, (err, results) => {
+  // 注意 执行delete 语句之后 结果也是一个对象，包含affectedRows属性
+  if (err) return (`删除数据失败` + err.message)
+  if (results.affectedRows===1) console.log(`删除数据成功`);
+})
+
+7. 标记删除
+使用 DELETE 语句，会把真正的把数据从表中删除掉。为了保险起见，推荐使用标记删除的形式，来模拟删除的动作。
+所谓的标记删除，就是在表中设置类似于 status 这样的状态字段，来标记当前这条数据是否被删除。
+当用户执行了删除的动作时，我们并没有执行 DELETE 语句把数据删除掉，而是执行了 UPDATE 语句，将这条数据对应
+的 status 字段标记为删除即可。
+// 标记删除
+const sqlStr = `update users set status=? where id=?`
+db.query(sqlStr, [1, 4], (err, results) => {
+  if (err) console.log(`删除失败` + err.message);
+  if(results.affectedRows===1) console.log(`标记删除成功`);
+})
+
+
+3. 前后端分离的 Web 开发模式
+前后端分离的概念：前后端分离的开发模式，依赖于 Ajax 技术的广泛应用。简而言之，前后端分离的 Web 开发模式，
+就是后端只负责提供 API 接口，前端使用 Ajax 调用接口的开发模式
+4. 前后端分离的优缺点
+优点：
+① 开发体验好。前端专注于 UI 页面的开发，后端专注于api 的开发，且前端有更多的选择性。
+② 用户体验好。Ajax 技术的广泛应用，极大的提高了用户的体验，可以轻松实现页面的局部刷新。
+③ 减轻了服务器端的渲染压力。因为页面最终是在每个用户的浏览器中生成的。
+缺点：
+① 不利于 SEO。因为完整的 HTML 页面需要在客户端动态拼接完成，所以爬虫对无法爬取页面的有效信息。（解决方
+案：利用 Vue、React 等前端框架的 SSR （server side render）技术能够很好的解决 SEO 问题！）
+
+
+① 服务端渲染推荐使用 Session 认证机制
+② 前后端分离推荐使用 JWT 认证机制
+3. 什么是 Cookie
+Cookie 是存储在用户浏览器中的一段不超过 4 KB 的字符串。它由一个名称（Name）、一个值（Value）和其它几个用
+于控制 Cookie 有效期、安全性、使用范围的可选属性组成。
+不同域名下的 Cookie 各自独立，每当客户端发起请求时，会自动把当前域名下所有未过期的 Cookie 一同发送到服务器。
+Cookie的几大特性：
+① 自动发送
+② 域名独立
+③ 过期时限
+④ 4KB 限制
+
+
+1. 安装 express-session 中间件
+在 Express 项目中，只需要安装 express-session 中间件，即可在项目中使用 Session 认证
+npm i express-session 
+配置session中间件
+var Session = require(`express-session`)
+ app.use(session({
+secret:`keyboard cat`,  //secret 属性的值可以为任意字符串
+resave:false,		//固定写法
+saveUninitialized:true	//固定写法
+}))
+
+session.destroy() 			清空session
+
+
+1. 安装 JWT 相关的包
+运行如下命令，安装如下两个 JWT 相关的包： npm i jsonwebtoken express-jwt
+其中：
+⚫ jsonwebtoken 用于生成 JWT 字符串
+⚫ express-jwt 用于将 JWT 字符串解析还原成 JSON 对象
+2. 导入 JWT 相关的包
+const jwt = require(`jsonwebtoken`)
+const expressJWT = require(`express-jwt`)
+3. 定义 secret 密钥
+为了保证 JWT 字符串的安全性，防止 JWT 字符串在网络传输过程中被别人破解，我们需要专门定义一个用于加密和解密
+的 secret 密钥： const secretKey = `itheima No1 ^-^`
+① 当生成 JWT 字符串的时候，需要使用 secret 密钥对用户的信息进行加密，最终得到加密好的 JWT 字符串
+② 当把 JWT 字符串解析还原成 JSON 对象的时候，需要使用 secret 密钥进行解密
+4. 在登录成功后生成 JWT 字符串
+调用 jsonwebtoken 包提供的 sign() 方法，将用户的信息加密成 JWT 字符串，响应给客户端:
+// TODO_03：在登录成功之后，调用 jwt.sign() 方法生成 JWT 字符串。并通过 token 属性发送给客户端
+  // 参数1  用户的信息对象
+  // 参数2 加密的密钥
+  // 参数3 配置对象，可以配置当前token的有效期
+  const tokenStr=  jwt.sign({username:userinfo.username},secretKey,{expiresIn:`30s`})
+// TODO_04：注册将 JWT 字符串解析还原成 JSON 对象的中间件
+app.use(expressJWT({secret:secretKey}).unless({path:[/^\/api\//]}))
+
+
+对着表格右键 选择alter table   是重新设置表格

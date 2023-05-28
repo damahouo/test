@@ -376,7 +376,7 @@ arr.join(`参数`)			将数组内的元素转换为一个字符串，并用参�
 
 const reg = /规则/			正则表达式定义规则
 reg.test(被检测的字符串)		检测字符串是否匹配，返回一个布尔值
-reg.exec(被检测的字符串)		检索符合规则的字符串，有返回数组，没有返回null
+reg.exec(被检测的字符串)		检索符合规则的字符串，有返回数组，没有返回null 正则匹配
 
 ^	表示匹配行首的文本以谁开始
 $ 	表示匹配行尾的文本以谁结束
@@ -412,6 +412,7 @@ Array      .forEach   		遍历数组
 	.map		加工数组
 	.reduce    		(累计器，返回累计处理的结果，经常用于数组求和)
 	arr.reduce(function(上一次的值prev，当前值item{}，初始值)，需要return返回结果
+	例	子：const getarrSum = arr => arr.reduce((prev, item) => prev += item, 0)   //输出结果为arr的数组求和值
 ·	如果有起始值，则起始值作为上一次值开始循环累加，没有就是数组内第一个值作为上一次值
 	.find		查找元素，返回符合测试条件的第一个数组元素值，若没有符合条件的则返回undefined
 	arr.find((item) => item.name === `鸡哥`)，查找符合name是鸡哥的元素并返回这个元素

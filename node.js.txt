@@ -3,6 +3,8 @@ cmd  node -v 查看node版本号确认node是否安装成功
 cd + 文件路径		切换到次路径下
 2，输入node js文件名 	在node环境中执行js
 
+throw  new Error (`人为制造错误`)
+
 shift + 右键单击  		在此目录下打开cmd终端，且直接定位到该目录下
 ↑   			执行上一次的命令
 tab			快速补全文件名
@@ -129,3 +131,75 @@ i5ting_toc 是一个可以把 md 文档转为 html 页面的小工具，使用�
 npm install -g i5ting_toc
 2,调用i5ting_toc，轻松实现md转html 的功能
 i5ting_toc -f 要转换的md文件的路径 -o 
+
+express 第三方包 创建web服务器 或者api接口的服务器
+安装 
+npm i express@4.17.1
+1,导入express
+const express = require(`express`)
+2，创建web服务器
+const app = express()
+3,调用app.listen(端口号，启动成功后的回调函数)，启动服务器
+app.listen(80,()=>{console.log(`express server running at http://127.0.0.1`)}
+4. 监听GET请求，
+app.get(`请求的URL`,function(req,res){处理函数})
+5，监听post请求
+app.post(`请求的URL`,function(req,res){处理函数})
+6.把内容相应给客户端 通过res.send()方法发送
+7,通过req.query 可以获得客户端发过来的参数  req.query 默认情况下是个空对象
+req.params 是动态匹配到的url参数，默认也是一个空对象 例子：
+app.get(`/user/:id`,(req,res)=>{
+console.log(req.params)
+})
+此处的：表示动态匹配  id表示动态匹配的属性名，属性值为客户传递的参数，存储在req.params
+
+静态托管资源 非常好用
+express.static()  通过它，我们可以非常方便的创建一个静态资源服务器，例如，通过以下代码就可以将public目录下的文件对外开放访问
+app.use(express.static(`public`))
+注意，Express在指定的静态目录中查找文件，并对外提供资源的访问路径，因此 存放静态文件的目录名不会出现咋url中
+如果需要托管多个静态资源目录，多次调用express.static()即可，会根据函数调用目录的顺序查找所需的文件
+如果希望在托管静态资源访问的路径之前，挂在路径前缀，可以使用以下方式：
+app.use(`/public`,express.static(`public`))
+
+nodemon  在编写调试node.js项目时，如果修改了项目代码，则需要频繁的手动关掉再重启，非常麻烦 可以借助此工具自动重启
+npm install -g nodemon
+传统方式时运行 node app.js 可以使用nodemon app.js 来启动项目，这样就可以自动重启项目
+
+express中，路由指的是客户端的请求与服务器处理函数之间的映射关系
+为了方便对路由进行模块化的管理，Express 不建议将路由直接挂载到 app 上，而是推荐将路由抽离为单独的模块。
+① 创建路由模块对应的 .js 文件
+② 调用 express.Router() 函数创建路由对象
+③ 向路由对象上挂载具体的路由
+④ 使用 module.exports 向外共享路由对象
+⑤ 使用 app.use() 函数注册路由模块
+
+中间件全局挂载 
+app.use((req,res,next)=>{
+next()
+})
+多个中间件之间，共享同一份 req 和 res。基于这样的特性，我们可以在上游的中间件中，统一为 req 或 res 对象添
+加自定义的属性或方法，供下游的中间件或路由进行使用。
+可以使用 app.use() 连续定义多个全局中间件。客户端请求到达服务器之后，会按照中间件定义的先后顺序依次进行调用
+不使用 app.use() 定义的中间件，叫做局部生效的中间件 例子：
+app.get(`url`,mw1,function(){})  此处的mw1为局部中间件函数，只在这个路由中生效 用逗号分割可以定义多个局部中间件
+注 ： 一定要在路由之前定义中间件   客户端发送的请求，可以连续调用多个中间件处理  不要忘记 调用 next（） 调用玩next函数之后
+    就不要再写代码，避免逻辑混乱
+中间件五大类 ：
+应用级别中间件   通过app.use()  app.get()  app.post() 绑定到app实例上的中间件
+路由级别中间件   绑定到express.Router()   
+错误级别中间件    专门用来捕获整个项目中发生的异常错误，从而防止项目异常崩溃，必须有四个参数（err,req,res,next），
+		错误级别的中间件，必须组注册在所有路由之后
+express内置中间件    express.static 托管静态资源， express.json 解析JSON格式的请求数据 ，express.urlencoded 解析URL-encoded格式的请求体数据
+		通过app.use(express.json())       app.use(express.urlencoded({extended:false}))   挂载中间件
+
+在服务器，可以使用req.body这个属性，接收客户端发送过来的请求体数据 需要配置解析表单中间件  ，不配置任何中间件的话，此属性为undifined
+第三方解析中间件：	先npm i body-parser
+		const parser = require(`body-parser`)
+	     app.use(parser.urlencoded({ extended : fale }))
+node内置了一个querystring 模块，专门用来处理查询字符串，通过这个模块提供的parse（）函数，把查询字符串解析成对象的格式
+	const qs = qrquire(`querystring`)
+	const obj= qs.parse(str)
+
+CORS 中间件 解决跨域问题    npm i cors 	下载中间件	
+const cors = require(`cors`)		导入中间件
+app.use(cors())			配置中间件
