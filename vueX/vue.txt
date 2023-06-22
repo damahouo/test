@@ -1,0 +1,872 @@
+--legacy-peer-deps 优雅解决冲突
+创建vue项目命令  vue create 项目名称	
+		Auto Close Tag  标签自闭和插件
+构建用户界面的框架 框架是一套现成的解决方案
+指令 组件 路由 vuex vue组件库
+1 数据驱动视图 
+ 数据的变化会驱动视图自动更新
+ 好处 程序员只管把数据维护好，那么页面结构会被vue自动渲染
+2 双向数据绑定
+ 在网页中 form表单负责采集数据 ajax负责提交数据
+  js数据的变化会被自动渲染到页面上
+  页面上表单采集的数据发生变化会被vue自动获取并更新到js数据中
+ 注意：数据驱动视图和双向数据绑定的底层原理时MVVM （Mode，View视图，ViewModel 就是vue实例）
+
+
+		基本使用步骤
+① 导入 vue.js 的 script 脚本文件
+② 在页面中声明一个将要被 vue 所控制的 DOM 区域
+③ 创建 vm 实例对象（vue 实例对象）
+  <body>
+    <div id="app">{{ name }}</div>
+    <!-- 导入 vue 的库文件 在window全局就有了vue这个构造函数 -->
+    <script src="./lib/vue-2.6.12.js"></script>
+    <!--  -->
+    <script>
+      // 创建vue实例对象
+      const wm = new Vue({
+        // el 属性时固定写法，表示当前vm实例要控制页面上哪个区域 接受的值是一个选择器
+        el: "#app",
+        // data 对象就是要渲染到页面上的数据
+        data: {
+          name: "zhangsan",
+        },
+         thodes:{}
+      })
+    </script>
+  </body>
+
+安装 vue-devtools 调试工具
+vue 官方提供的 vue-devtools 调试工具，能够方便开发者对 vue 项目进行调试与开发。
+Chrome 浏览器在线安装 vue-devtools ：
+https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd
+FireFox 浏览器在线安装 vue-devtools ：
+https://addons.mozilla.org/zh-CN/firefox/addon/vue-js-devtools/
+
+		指令的概念
+指令（Directives）是 vue 为开发者提供的模板语法，用于辅助开发者渲染页面的基本结构。
+vue 中的指令按照不同的用途可以分为如下 6 大类：
+① 内容渲染指令
+② 属性绑定指令
+③ 事件绑定指令
+④ 双向绑定指令
+⑤ 条件渲染指令
+⑥ 列表渲染指令
+注意：指令是 vue 开发中最基础、最常用、最简单的知识点。
+
+1.1 内容渲染指令
+内容渲染指令用来辅助开发者渲染 DOM 元素的文本内容。常用的内容渲染指令有如下 3 个：
+⚫ v-text   	标签属性值 会覆盖原本标签内容
+⚫ {{ }}		插值表达式 Mustache   用的最多，占位符 不会覆盖原内容  只能用在元素内容节点中，无法在元素属性节点使用
+⚫ v-html	标签属性值 可以解析标签内容
+
+1.2 属性绑定指令
+如果需要为元素的属性动态绑定属性值，则需要用到 v-bind: 属性绑定指令。用法示例如下：
+<input type="text" v-bind:placeholder="tips" />
+实际开发中可以简写为 :
+<input type="text" :placeholder="tips" />
+在使用v-bind 属性绑定期间 如果需要进行动态拼接 则字符串的外面应该包裹单引号 例如：<div :title="'box' + index">这是测试</div>
+
+1.3 事件绑定指令
+vue 提供了 v-on 事件绑定指令，用来辅助程序员为 DOM 元素绑定事件监听。语法格式如下：
+ <button v-on:click="add(n)">+1</button>    //此处add函数后面加小括号可以为函数传参
+methods: {
+          add(n) {
+            vm.count < 10 ? (vm.count += n) : vm.count
+          },
+        },
+	v-on 的指令可以简写为 @
+v-on:click="add(n)"     ===     @click="add(n)"
+
+触发事件中，$event.target 表示触发事件的元素
+@click.prevent 事件修饰符写法 阻止事件默认行为
+----------------------------------------------------
+.prevent 阻止默认行为（例如：阻止 a 连接的跳转、阻止表单的提交等）	常用
+.stop 阻止事件冒泡						常用
+.capture 以捕获模式触发当前的事件处理函数
+.once 绑定的事件只触发1次
+.self 只有在 event.target 是当前元素自身时触发事件处理函数
+
+按键修饰符
+在监听键盘事件时，我们经常需要判断详细的按键。此时，可以为键盘相关的事件添加按键修饰符：
+<input type="text" @keyup.enter="enter" />   //需要按哪个键触发就在keyup.后面用哪个键位修饰即可
+
+1.4 双向绑定指令
+vue 提供了 v-model 双向数据绑定指令，用来辅助开发者在不操作 DOM 的前提下，快速获取表单的数据。
+v-model指令能和input  textarea select checkbox
+
+v-model 指令的修饰符
+为了方便对用户输入的内容进行处理，vue 为 v-model 指令提供了 3 个修饰符，分别是：
+修饰符 		作用 					示例
+.number 		自动将用户的输入值转为数值类型 		<input v-model.number="age" />
+.trim 		自动过滤用户输入的首尾空白字符 		<input v-model.trim="msg" />
+.lazy 		在“change”时而非“input”时更新 		<input v-model.lazy="msg" />
+
+1.5 条件渲染指令
+条件渲染指令用来辅助开发者按需控制 DOM 的显示与隐藏。条件渲染指令有如下两个，分别是：
+⚫ v-if
+⚫ v-show
+示例用法如下：
+
+v-if 和 v-show 的区别
+实现原理不同：
+⚫ v-if 指令会动态地创建或移除 DOM 元素，从而控制元素在页面上的显示与隐藏；
+	如果元素不需要被展示创建 if的性能会更好  因为v-if不会渲染出元素 减少性能消耗
+⚫ v-show 指令会动态为元素添加或移除 style="display: none;" 样式，从而控制元素的显示与隐藏；
+	如果要频繁的切换元素的显示状态 用v-show性能更好
+v-if 可以单独使用，或配合 v-else 指令一起使用
+
+1.6 列表渲染指令
+vue 提供了 v-for 列表渲染指令，用来辅助开发者基于一个数组来循环渲染一个列表结构。v-for 指令需要使
+用 item in items 形式的特殊语法，其中：
+⚫ items 是待循环的数组
+⚫ item 是被循环的每一项
+v-for 指令还支持一个可选的第二个参数，即当前项的索引。语法格式为 (item, index) in items，示例代码如下
+list: [
+            { id: 1, name: "张三" },
+            { id: 2, name: "李四" },
+            { id: 3, name: "王五" },
+          ],
+<tr v-for="(item,index) in list">
+            <td>{{ index }}</td>
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+          </tr>
+  	 <!-- 官方建议，只要用到了v-for 指令 那么一定要绑定一个 :key 属性 -->
+        	 <!--  而且，尽量把不重复的id作为key的值 key的值具有唯一性的-->
+         	 <!--  官方对key 的值类型要求为数字或者字符串类型 -->
+         	 <tr v-for="(item,index) in list" :key="item.id">
+   {{形参 | 过滤器函数}}
+过滤器函数 定义在 filter属性内
+在过滤器中一定要有 return 值
+在过滤器形参中 管道符前面的就是待处理的值
+
+在vm实例化之前 调用 Vue.filter('过滤器函数名',()=>{})
+如果过滤器和私有过滤器名字一直 则按照就近原则调用 先局部 再全局
+
+watch 侦听器  
+ watch: {
+          // 侦听器的本质是一个函数 要监听哪个数据的变化 就把数据名作为方法名即可
+          // 新值在前，旧值在后
+          username(newVal, oldVal) {
+            console.log("真听到了变化", newVal, oldVal)
+            $.get(`https://www.escook.cn/api/finduser/`)
+          },
+        },
+
+ 方法格式的侦听器 	1无法在刚进入页面的时候 自动触发！！ 
+		2 如果侦听的对象 对象内的属性发生变化 不会触发侦听器
+ 对象格式的侦听器 可以在进入页面时自动触发 ：对象格式例子：
+ watch: {
+          username: {
+            // 这样写表示只要username的值发生变法 就会触发handel函数
+            handler(newVel, oldVel) {     		//handler为固定写法  username值变化就会触发此函数
+              console.log(newVel, oldVel)
+            },
+            immediate: true,			//immediate 固定写法，true表示一进入页面就会触发handler函数
+            deep:true,				//deep固定写法，true表示深度侦听 只要对象发生变化 就会触发侦听器
+          },
+        },
+
+// 侦听对象属性的变化 如果侦听的时对象的子属性 则需要单引号包裹  可以直接侦听对象子属性的变化 并拿到变化值
+          "info.username"(newVal, oldVal) {
+            console.log(newVal, oldVal)
+          },
+
+:style="{ backgroundColor: `rgb(${r}, ${g}, ${b})` }"
+
+		计算属性
+所有的计算属性都需要定义到 computed 节点之下
+计算属性在定义的时候 要定义成 “方法格式”
+计算属性指的是通过一系列运算之后，最终得到一个属性值。
+这个动态计算出来的属性值可以被模板结构或 methods 方法使用。示例代码如下：
+computed: {
+          // rgb作为一个计算属性 被定义成方法的格式
+          // 最终 在这个方法中 要返回一个生成好的rgb(x,x,x) 的字符串
+          rgb() {
+            return `rgb(${this.r},${this.g},${this.b})` //注意此处的``而不是''
+          },
+        },
+计算属性 要被定义为 方法
+使用计算属性是 要当普通属性使用
+实现代码的复用
+只要计算属性依赖的data内的数据变化了 计算属性会重新求值
+
+
+单页面应用程序  简称SPA
+vue-cli  				弹幕：未来是vite
+中文官网：https://cli.vuejs.org/zh/
+安装
+npm install -g @vue/cli
+创建项目
+vue create 项目名称
+->
+Vue CLI v5.0.8
+? Please pick a preset:
+  Default ([Vue 3] babel, eslint) 
+  Default ([Vue 2] babel, eslint) 
+> Manually select features        
+一般选择最后一项 可以手动配置
+->
+Vue CLI v5.0.8
+? Please pick a preset: Manually select features
+? Check the features needed for your project: (Press <space> to select, <a> to toggle all, <i> to invert selection, and <enter> to proceed)
+ (*) Babel					//babel是配置语法兼容性的
+>( ) TypeScript				//微软的脚本语言
+ ( ) Progressive Web App (PWA) Support	//渐进式的框架
+ ( ) Router				//路由
+ ( ) Vuex					//
+ (*) CSS Pre-processors			//CSS 预处理器 比如less 空格选中
+ ( ) Linter / Formatter			//约束团队代码风格的
+ ( ) Unit Testing				//
+ ( ) E2E Testing				//
+->
+选择vue 版本 2.x 或3.x
+->
+选择CSS预处理器
+Vue CLI v5.0.8
+? Please pick a preset: Manually select features
+? Check the features needed for your project: Babel, CSS Pre-processors
+? Choose a version of Vue.js that you want to start the project with 2.x
+? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default): (Use arrow keys)
+ Sass/SCSS (with dart-sass)
+>  Less
+  Stylus
+->
+询问第三方的配置文件 默认选第一项就可以  把babel ESlinet 放到自己配置的文件中
+Vue CLI v5.0.8
+? Please pick a preset: Manually select features
+? Check the features needed for your project: Babel, CSS Pre-processors
+? Choose a version of Vue.js that you want to start the project with 2.x
+? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default): Less
+? Where do you prefer placing config for Babel, ESLint, etc.? (Use arrow keys)
+> In dedicated config files
+  In package.json
+->
+把选择结果创建为一个备份 供下次创建项目使用
+Vue CLI v5.0.8
+? Please pick a preset: Manually select features
+? Check the features needed for your project: Babel, CSS Pre-processors
+? Choose a version of Vue.js that you want to start the project with 2.x
+? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default): Less
+? Where do you prefer placing config for Babel, ESLint, etc.? In dedicated config files
+? Save this as a preset for future projects? (y/N)
+->
+Vue CLI v5.0.8
+? Please pick a preset: Manually select features
+? Check the features needed for your project: Babel, CSS Pre-processors
+? Choose a version of Vue.js that you want to start the project with 2.x
+? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default): Less
+? Where do you prefer placing config for Babel, ESLint, etc.? In dedicated config files
+? Save this as a preset for future projects? Yes
+? Save preset as: 预设备份的名字
+->
+🎉  Successfully created project demo_first.
+👉  Get started with the following commands:
+
+ $ cd demo_first
+ $ npm run serve
+
+
+vue项目中src 目录构成
+assets 文件夹 存放项目中用到的静态资源文件 例如 CSS 样式表 图片资源
+components 文件夹  ： 程序员封装的 可复用的组件 都要放到components 目录下
+main.js 是项目的入口文件 整个项目的运行 要先执行main.js
+app.vue 是项目的根组件 
+
+ vue 项目的运行流程
+在工程化的项目中，vue 要做的事情很单纯：通过 main.js 把 App.vue 渲染到 index.html 的指定区域中
+其中：
+① App.vue 用来编写待渲染的模板结构
+② index.html 中需要预留一个 el 区域
+③ main.js 把 App.vue 渲染到了 index.html 所预留的区域中
+
+// vue实例的.$mount 方法和el 作用是一致的
+
+1. 什么是组件化开发
+组件化开发指的是：根据封装的思想，把页面上可重用的 UI 结构封装为组件，从而方便项目的开发和维护。
+2. vue 中的组件化开发
+vue 是一个支持组件化开发的前端框架。
+vue 中规定：组件的后缀名是 .vue。之前接触到的 App.vue 文件本质上就是一个 vue 的组件。
+3. vue 组件的三个组成部分  （组件是对UI结构的复用）
+每个 .vue 组件都由 3 部分构成，分别是：
+ template -> 组件的模板结构
+ script -> 组件的 JavaScript 行为
+ style -> 组件的样式
+其中，每个组件中必须包含 template 模板结构，而 script 行为和 style 样式是可选的组成部分。
+
+三大部分示例： 使用插件后 输入// 可直接生成空结构 
+ <!-- -------------------------这个是组件的模板结构 -------------------------------------------------------->
+<template>
+    <div id="box">这是用户自己的页面
+
+         <p>用户名是: {{ username }}</p>
+         <button @click="changeName">修改用户名</button>
+    </div>
+   
+</template>
+<!-- -------------------------这个是组件的JS行为 -------------------------------------------->
+<script>
+// 默认导出 这个是固定写法
+// data 数据源
+// 注意 组件中的data 必须是一个函数 定义的数据为返回值
+export default {
+    data() {
+        // 这个return 出去的对象中 可以定义数据
+        return {
+            username: '张三',
+        } 
+    },
+    methods: {
+        changeName() {
+           this.username= 'wahaha' //此处的this 指向的是组件的实例对象
+        }
+    },
+    // 当前组件的侦听器
+    watch: {
+        username( newval,oldvalue) {
+            console.log(newval, oldvalue);
+        }
+    },
+    // 当前组件的计算属性
+    computed: {},
+    // 当前组件的过滤器
+    filter: {},
+
+}
+
+</script>
+<!-- ----------------------------这个是组件的样式 --------------------------------------------->
+<style lang="less">  //使用less语法的话需要加lang属性
+#box{
+    background-color: red;
+}
+</style>
+
+
+vue使用根组件三大步骤
+<div class="box">					步骤3：以标签的形式使用刚才注册的组件
+      <!-- 渲染 Left 组件和 Right 组件 -->
+      <left></left>>
+    </div>
+
+import left from '@/components/Left.vue'		步骤1 ：使用import语法导入需要的组件 在scr标签内导入
+
+ components: {					步骤2：使用components节点注册组件 
+    left
+  },
+
+
+Path Autocomplete 插件 配置路径提示的
+//导入文件时是否携带文件的扩展名
+  "path-autocomplete.extensionOnImport": true,
+  // 配置@的路径提示
+  "path-autocomplete.pathMappings": {
+    "@":"${folder}/src"
+  },
+
+ 通过 components 注册的是私有子组件
+注册全局组件
+在 vue 项目的 main.js 入口文件中，通过 Vue.component() 方法，可以注册全局组件。示例代码如下：
+// 导入需要全局注册的组件
+import Count from "@/components/Count.vue"
+
+// 参数1 字符串格式 表示组件的“注册名称”
+// 参数2  需要被全局注册的那个组件
+Vue.component('MyCount',Count)
+
+组件的 props
+props 是组件的自定义属性，在封装通用组件的时候，合理地使用 props 可以极大的提高组件的复用性！
+props从父组件接收到的数据简单数据不允许修改，复杂数据允许修改，但是不允许重新赋值
+它的语法格式如下：
+export default {
+    // props 是自定义属性 ，允许使用者通过自定义属性，为当前组件指定初始值
+    props:['init'],
+}
+
+<MyCount :init="9"></MyCount> 这样使用组件init 的值为数字模式
+props中的数据，可以直接在模板结构中被使用
+vue 规定：组件中封装的自定义属性是只读的，程序员不能直接修改 props 的值。否则会直接报错，
+所以可以通过this点出来赋值给常量
+ props 的 default 默认值
+在声明自定义属性时，可以通过 default 来定义属性的默认值。type规定数值类型，required规定必填项校验，示例代码如下
+    props: {
+        init: {
+            // 如果外界使用init时 没有传递属性值 ，则默认为0
+            default: 0,
+            // 可以规定init的数字类型
+            type: Number,
+            //required规定这个值必须填
+            required:true
+        }
+    },
+可以给style加 scoped 将组件内的样式变为只对组件内的元素生效： 防止样式污染
+<style lang="less" scoped>
+可以在选择器前加/deep/， 就可以通过父组件修改子组件的样式
+
+		组件的生命周期 ：每个组件从创建到运行到销毁的时间段
+https://cn.vuejs.org/v2/guide/instance.html#生命周期图示
+beforeCreate
+
+created ！ 生命周期函数 经常在它里面调用methods 中的方法 请求服务器的数据，并且把请求到的数据存入data中
+
+beforeMount
+
+mounted ！ 是最早可以操作dom元素的节点
+
+beforeUpdate  此时数据已经发生变化 但是还没渲染到页面结构中
+
+updated ！ 此时可以操作数据最新的dom结构
+
+beforDestroy 组将将要被销毁 但是还在正常工作时
+
+destroyed 销毁后
+		组件之间的数据共享
+父子关系 兄弟关系 
+父传子  子组件定义props 接收数据 父组件使用子组件时通过标签内传值给子组件定义的props  父组件向子组件共享数据需要使用自定义属性。
+
+子传父 子组件向父组件共享数据使用自定义事件。
+	子组件创建自定义事件 当自定义事件触发时，可以传递一个子组件的参数，父组件通过监听自定义事件，触发父组件的函数接收到这个参数：
+首先子组件在methodes自定义事件 this.$emit('自定义事件名',要传递的子数据t)     其中子传父的数据默认名为$event 可以防止父接收的时候被其他参数覆盖
+然后父组件中通过监听自定义事件触发某个函数 <Son @子组件自定义事件名="父组件触发函数"></Son>
+最后定义父组件触发函数接收子数据 父组件触发函数（val）{}  此处的val就表示从子组件接收来的数据 父组件在儿子插槽处定义接收函数
+
+兄弟之间数据共享 
+在 vue2.x 中，兄弟组件之间数据共享的方案是 EventBus。
+
+
+	兄弟组件A 数据发送方			eventBus.js			兄弟组件C 数据接收方
+inport bus from './enventBus.js'     			inport Vue from 'vue'		import bus from './enventBus.js'
+
+export default{					//向外共享Vue的实例对象		export default{
+   data(){						export default new Vue()		data(){	
+      return{									   return{	
+          mesg:'hello vue.js'								       msgFromLeft:''
+	}										}
+              },								 	              },
+      methods:{									    created（）{     //不要定义到methods里
+	sendMsg(){								           bus.$on('share',val=>{
+	   bus.#emit('share',this.msg)								this.msgFromLeft=val
+	}											})
+	}											}
+	}											}
+
+
+EventBus 的使用步骤
+① 创建 eventBus.js 模块，并向外共享一个 Vue 的实例对象
+② 在数据发送方，调用 bus.$emit('事件名称', 要发送的数据) 方法触发自定义事件
+③ 在数据接收方，调用 bus.$on('事件名称', 事件处理函数) 方法注册一个自定义事件
+
+每个 vue 的组件实例上，都包含一个 $refs 对象，里面存储着对应的 DOM 元素或组件的引用。默认情况下，
+组件的 $refs 指向一个空对象。  给标签加ref='名字' 也可以给子组件的标签加ref ，这样父组件可已通过this.$refs.子组件的ref属性   拿到子组件的属性和方法
+
+ this.$nextTick(cb) 方法
+组件的 $nextTick(cb) 方法，会把 cb 回调推迟到下一个 DOM 更新周期之后执行。通俗的理解是：等组件的
+DOM 更新完成之后，再执行 cb 回调函数。从而能保证 cb 回调函数可以操作到最新的 DOM 元素。
+
+购物车案例：
+
+
+			动态组件指的是动态切换组件的显示与隐藏。
+vue 提供了一个内置的 <component> 组件，专门用来实现动态组件的渲染。
+//当前要渲染的组件的名称：
+data() {
+    return {
+      comName:'Left'  	//此处的Left组件不要忘记加‘’
+    }
+  },
+//通过is属性 动态展示要渲染的组件：
+<component :is='comName' ></component>
+//点击按钮 动态切换要展示的组件
+    <button @click="comName='Left'">展示Left</button>
+    <button @click="comName='Right'">展示Right</button>
+
+
+<component> 组件切换显示组件的时候 会销毁原来显示的组件 这时可以用内置的keep-alive保持状态：
+<keep-alive><component></component></keep-alive>
+
+			keep-alive生命周期（单独的节点属性）
+当组件被缓存时，会自动触发组件的 deactivated 生命周期函数。
+当组件被激活时，会自动触发组件的 activated 生命周期函数。
+//当组件第一次被创建的时候 即会执行created生命周期，也会执行activated 生命周期
+//当组件被激活时 只会触发activated生命周期，不会再触发created生命周期 因为组件没有被创建
+
+			keep-alive 的 include 属性
+include 属性用来指定：只有名称匹配的组件会被缓存。多个组件名之间使用英文的逗号分隔：
+			还有exclude属性 可以来指定哪个组件不被缓存，与include属性是二选一属性 不可同时使用
+
+拓展 ： 可以为组件 内 节点加name节点指定组件的名称 name:'组件新名称'   ，注册组件时使用的名称 只是为了使用标签的时候的使用
+
+插槽（Slot）是 vue 为组件的封装者提供的能力。允许开发者在封装组件时，把不确定的、希望由用户指定的部分定义为插槽。
+可以把插槽认为是组件封装期间，为用户预留的内容的占位符
+
+<slot name="default"></slot>   //设置一个插槽 name属性值为插槽的名字 不设置name属性的话 默认值为default  具名插槽
+使用组件标签传入内容的话，的时候不指定插槽的名字的话 会插入到default插槽内，如果没有设置插槽 那么数据会被忽略
+这时可以设置v-slot:'插槽名字'   来指定内容插入到哪个插槽内  但是v-slot只能在组件内使用 所以此时需要将内容用template标签包裹
+<template v-slot:default>
+          <p>这个是p标签</p>
+</template>   
+v-slot:     简写为 #
+
+vant NavBar 导航栏
+
+<slot name=txt msg="hell vue"></slot> 在封装组件时，为预留的<slot>提供属性对应的值，这种用法，叫做 ‘作用域插槽’
+接收用等号接收，接收到的数据为对象格式：
+<templat #txt='scope'>     //scope = {msg:hell vue}
+
+			自定义指令 directives
+私有自定义指令	在每个 vue 组件中，可以在 directives 节点下声明私有自定义指令。
+全局自定义指令
+
+// 私有自定义指令
+  directives: {
+    color: {
+      //当指令绑定标签之后 会触发bind（自定义名）函数     注意 ！！！bind函数只会调用一次！！！update函数会在每次dom更新时被调用，和bind函数互补
+      bind(el，binding) {    //此处的el形参指绑定元素的Dom对象，binding(自定义名)表示使用自定属性时传来的值，值为binding.value（固定写法）
+        el.style.color='red'
+      }
+    }
+  }
+
+如果 bind和update 函数中的逻辑完全相同，则对象格式的自定义指令可以简写成函数格式：
+directives: {
+	color(el, binding) {
+   	el.style.color=binding.value
+  		 	},
+	}
+
+//全局共享的自定义指令
+全局共享的自定义指令需要通过“Vue.directive()”进行声明，在main,js文件下定义  示例代码如下：Vue.directive(指令名字，function（）{})
+Vue.directive('color', (el, binding) => {
+el.style.color=binding.value
+})
+
+
+
+							Eslint
+设置->tabsize 缩进改2和vue缩进改2
+
+> ESLint with error prevention only
+  ESLint + Airbnb config
+  ESLint + Standard config				//标准的配置规范
+  ESLint + Prettier
+
+//可以把一些公共的方法挂载到main.js文件中Vue的对象原型prototype上供每个Vue组件使用：
+Vue.prototype.axios = axios
+//在main.js文件中 全局配置请求的根路径 默认配置
+axios.defaults.baseURL = 'https://applet-base-api-t.itheima.net'
+// 但是把axios挂载到Vue原型上不利于接口的复用
+
+				前端路由 ：不同的哈希地址展示不同的组件
+前端路由的工作方式
+① 用户点击了页面上的路由链接
+② 导致了 URL 地址栏中的 Hash 值发生了变化
+③ 前端路由监听了到 Hash 地址的变化
+④ 前端路由把当前 Hash 地址对应的组件渲染都浏览器中
+
+
+路由使用步骤
+vue-router 是 vue.js 官方给出的路由解决方案。它只能结合 vue 项目进行使用，能够轻松的管理 SPA 项目
+中组件的切换。
+vue-router 的官方文档地址：https://router.vuejs.org/zh/
+
+配置vue-router插件     下载、引入、注册、规则、路由对象、注入、显示、改变url的hash路径值、导入对应组件显示
+npm i vue-router@3.5.2 -S vue2装这个版本
+创建路由模块
+在 src 源代码目录下，新建 router/index.js 路由模块，并初始化如下的代码：
+//1, 导入vue 和vuerouter
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+//2. 调用Vue.use()函数，把VueRouter 安装为Vue 的插件
+Vue.use(VueRouter)
+//3. 创建路由的实例对象
+const router=  new VueRouter
+//向外共享
+export default router
+👇
+创建路由模块之后，需要挂载到当前Vue项目中： 在main.js中
+//1 导入路由模块，目的：拿到路由的实例对象
+import router from '@/router/index.js'
+// 2 在Vue 项目中，想要把路由用起来，必须把路由实例对象，通过下面的方式进行挂载
+new Vue({
+  render: h => h(App),
+  router
+}).$mount('#app')
+
+
+
+ 
+1， 在vue主文件下 创建占位符
+    <!-- 只要在项目中安装和配置了 vue-router 就可以使用 router-view 这个组件了 -->
+    <!-- 他的作用很单纯 ，就是一个占位符 表示要展示的组件 -->
+    <router-view></router-view>
+2，在router的index.js文件下  的创建的路由实例对象下 设置路由对应关系
+const router=  new VueRouter({
+  //routes 是一个数组，作用：定义 hash  地址 与 组件 之间的对应关系 需要先导入Home Movie About 对应的组件
+  routes:[
+	//这些也叫路由规则
+    {path:'/home' , component : Home },
+    {path:'/movie' , component : Movie },
+    {path:'/about' , component : About },
+  ]
+})
+3 向外暴露出去路由 router
+
+	拓展：
+    <!-- 当安装和配置了 vue-router后 就可以使用router-link 来替代a链接  to属性的值是跳转的哈希地址--> 例：
+    <router-link to="/home">首页</router-link>
+
+		路由重定向 redirect
+路由重定向指的是：用户在访问地址 A 的时候，强制用户跳转到地址 C ，从而展示特定的组件页面。
+通过路由规则的 redirect 属性，在路由A的路由规则上，指定一个新的路由地址，可以很方便地设置路由的重定向：
+routes:[
+    // 下面的是路由重定向规则 当用户访问的是/地址时，跳转到
+    {path:'/',redirect:'/home'},
+    {path:'/home',component:Home},
+  ]，
+
+		嵌套路由
+1，设置子路由链接 router-link 
+<router-link to="/about/tab1">子集路由2</router-link>		//注意 to 后面的路径要加/ 
+2,设置子路由占位符
+    <router-view></router-view>
+3，声明子路由规则
+通过 children 属性声明子路由规则
+在 src/router/index.js 路由模块中，导入需要的组件，并使用 children 属性声明子路由规则：
+const router=  new VueRouter({
+  //routes 是一个数组，作用：定义 hash地址 与 组件 之间的对应关系
+  routes:[
+    {path:'/about',component:About,children:[			//注意 子路由的路径里不要加/   
+      {path:'/about',redirect:'tab2'},
+      {path:'tab1',component:Tab1},
+      {path:'tab2',component:Tab2},         ]
+  },
+  ]
+})
+
+// 如果children数组中 某个路由规则的path值为空字符串 则这条路由规则为 默认子路由
+{path:'',component:Tab2},
+
+ 			动态路由的概念
+动态路由指的是：把 Hash 地址中可变的部分定义为参数项，从而提高路由规则的复用性。
+在 vue-router 中使用英文的冒号（:）来定义路由的参数项。示例代码如下：
+{path:'/movie/:id',component:Movie},
+在动态路由渲染出来的组件中，可以使用 this.$route.params 对象访问到动态匹配的参数值。
+
+    // 可以为路由规则开启props动态传参 从而方便的拿到动态参数的值 路由动态传参
+    {path:'/movie/:id',component:Movie,props:true},
+然后在展示的组件内，用props来接收参数值：
+props: ['id'],
+
+$route是路由的   参数对象
+$router是路由的  导航对象
+注意1  在哈希地址中，/后面的参数项 叫做路径参数
+在路由”参数对象中“，需要使用this.$route.params来访问路径参数
+注意2 在哈希地址中，？后面的参数想 叫做查询参数
+在路由”参数对象中“，需要使用this.$router.query来访问查询参数
+注意3 在this.$route中 path只是路径部分，fullpath是完整的地址，例如：
+/movie/2?name=zs 是fullpath
+/movie/2 		是path
+
+vue-router 中的编程式导航 API 跳转页面
+vue-router 提供了许多编程式导航的 API，其中最常用的导航 API 分别是：
+① this.$router.push('hash 地址')
+⚫ 跳转到指定 hash 地址，并增加一条历史记录
+② this.$router.replace('hash 地址')
+⚫ 跳转到指定的 hash 地址，并替换掉当前的历史记录
+③ this.$router.go(数值 n)
+⚫ 实现导航历史前进、后退
+
+在实际开发中，一般只会前进和后退一层页面。因此 vue-router 提供了如下两个便捷方法：
+① $router.back()
+⚫ 在历史记录中，后退到上一个页面
+② $router.forward()
+⚫ 在历史记录中，前进到下一个页面
+注意 在行内使用编程式跳转的时候，注意省略this 否则会报错
+
+			路由守卫
+每次发生路由的导航跳转时，都会触发全局前置守卫。因此，在全局前置守卫中，程序员可以对每个路由进行
+访问权限的控制：
+//只要发生了路由的跳转 必然会触发 beforeEach的回调函数，接收3个形参 to from  next
+ router.beforeEach(function(to,from,next){
+  // next表示放行的意思
+  // to表示将要访问的路由信息对象
+  // from表示将要离开的路由对象
+  next()
+})
+
+当前用户拥有后台主页的访问权限，直接放行：next()
+当前用户没有后台主页的访问权限，强制其跳转到登录页面：next('/login')
+当前用户没有后台主页的访问权限，不允许跳转到后台主页：next(false)
+
+
+vue 第二块模板
+  name: 'HomeIndex',
+  components: {},
+  props: {},
+  data () {
+    return {}
+  },
+  computed: {},
+  watch: {},
+  created () {},
+  mounted () {},
+  methods: {}
+
+        if (Math.random() > 0.5) {
+          JSON.parse('asdfcasd')
+        }
+随机抛出一个错误 制造一个错误
+
+JSONBig json-bigint	
+
+文章正文样式处理步骤
+1 打开
+github-markdown-css
+2 选择github-markdown.css文件 
+3 点击raw看文件原始内容
+4 下载文件到项目文章目录下
+5 @import url(./github-markdown.css);    引入到style样式下
+6 给文章正文标签添加类名 markdown-body 
+  此时字小是因为文件本身是在pc端适配， 我们最好不要用rem适配工具转换此样式 （postcss-pxtorem） 取消转换此文件内容
+  有个属性exclude 用来排除不想转换的样式文件
+  在项目配置的.postcssrc.js文件中 添加配置
+ exclude :'github-markdown'     填写不转换的样式文件名
+  
+
+获取dom元素
+给标签添加ref="自定义名称"
+处理dom ： this.$refs['自定义名称']
+
+获取图片预览功能代码实例 ：
+1 获取文章数据完成之后  注意 因为数据驱动视图不是立即的，所以要设置一个定时器来异步操作
+2 设置触发文章预览功能函数
+setTimeout(() => {
+          // 单独定义一个方法处理图片预览
+          this.previewImage()
+        }, 0)
+3 定义文章预览功能函数
+    previewImage() {
+      // 拿到所有的img节点
+      const articleContent = this.$refs.articleContent   （articleContent是定义的ref= 获取dom元素的名称）
+      // console.log(articleContent)
+      // 拿到所有img节点
+      const imgs = articleContent.querySelectorAll('img')
+      // 拿到图片链接地址放在地址数组里 用于预览
+      const images = []
+      // 循环遍历每个图片dom节点
+      imgs.forEach((img, index) => {
+        // 将每个dom节点里的图片地址存入的图片地址数组中
+        images.push(img.src)
+        // 给每个dom节点注册点击事件
+        img.onclick = () => {
+          // 点击就触发图片预览功能函数  此函数来自vant组件
+          ImagePreview({
+            images, // es6写法 将图片地址数组传进去
+
+            startPosition: index // 表示图片预览起始位置，传入每个图片的下标索引
+          })
+        }
+      })
+    }
+
+如果有一个父传子的数据，子组件既需要用，又需要改，（v-model只能定义一个数据）可以使用v-model进行子父组件进行双向绑定，子组件用value表示接收，父组件用@input表示监听
+：父组件会给子组件传一个名叫value的propos，并且自动监听@input事件，并将value的值改为$event
+ 如果需要修改 v-model的规则名称，可以用子组件的model属性修改配置 model:{ prop:'重命名属性名'，event:'重命名事件名'}
+
+动态添加元素类名 动态添加类名
+v-band：class= 类名 ： 跟一个布尔值表达式 true的话就添加此类名 false就不加
+:class="{actives:index===actives}"
+
+
+				处理头像更换实例
+A        <input type="file" ref="file" hidden @change="fileChange">   		2 监听文件的change事件
+
+B    <van-cell title="头像" is-link @click="$refs.file.click()">    		1 点击B  触发A的点击事件 
+
+3 定义change事件触发的事件函数
+    fileChange() {
+      // 获取文件对象
+      const file = this.$refs.file.files[0]
+      console.log(file)
+      // 基于文章对象获取blob 数据
+      const data = window.URL.createObjectURL(file)
+      console.log(data)
+      // 把data赋值给img传递给子组件 ，子组件就可以用img标签src=img 展示图片
+      this.img = data
+      // 重点 file-input 如果选了同一个文件不会触发change事件
+      // 解决办法就是每次使用完毕，把他的value清空
+      this.$refs.file.value = ''
+      // 展示弹层
+      this.isupdataPhotoshow = true
+    }
+
+使用插件对图片进行裁切  Cropper.js
+npm install cropperjs 
+
+引入样式和插件
+import 'cropperjs/dist/cropper.css'
+import Cropper from 'cropperjs'
+
+确保图片有父容器并且宽度占满100%  并且需要转为块元素
+vue 中在 mounted 生命周期函数操作dom
+ mounted() {
+    const image = this.$refs.img  		//获得图片的dom元素
+    const cropper = new Cropper(image, {	//传入dom元素
+      viewMode: 1, // 查看模式 0裁剪框可以扩展到画布外面 123会将裁剪框限制为画布大小 2或3的viewMode将另外将画布限制为容器 如果画布和容器的比例相同，则2-3 之间没有差别
+      dragMode: 'move', // 拖动模式crop模式默认 会重新定义裁剪大小 move模式图片可以拖动 none裁剪器可以拖动，画布不能拖动
+      aspectRatio: 1, // 截图器的比例 默认16/9 因为这里要展示正方形 所以1/1 简写为1
+      autoCropArea: 1, // 自动截取比例为1 画布大小
+      cropBoxMovable: false, // 截图器是否可以移动
+      cropBoxResizable: false, // 截图器是否可以缩放
+      background: false, // 元素格的背景有无
+      movable: true // 配置画布是否可以移动
+    })
+    console.log(cropper)
+  }
+
+配置说明：
+如果是基于服务端的裁切，则使用： getData]() 方法，该方法得到裁切的区域参数。
+https://github.com/fengyuanchen/cropperjs#getdatarounded	pc端一般采用此方法 但是需要后端接口支撑
+
+如果是纯客户端的图片裁切，则使用：getCroppedCanvas](） 方法，该方法得到裁切之后的图片对象（类似于URL.createObjectURL 方法得到的文件对象）。 
+https://github.com/fengyuanchen/cropperjs#getcroppedcanvasoptions  服务都一般用此方法
+
+在methods方法中定义获取裁切数据的方法 ：
+    getPhoto() {
+      try {
+        this.$toast.loading({
+          message: '保存中',
+          forbidClick: true,
+          duration: 0
+        })
+        // console.log(this.cropper.getData()) //基于服务端裁切的方法获取裁切数据
+
+        // 纯客户端裁切的方法获取裁切数据
+
+        this.cropper.getCroppedCanvas().toBlob(async blob => {
+          // 如果接口要求 Content-Type 是 application/json
+          // 则传递普通的javaScript对象
+          // changeuserPhoto({
+          //   photo: blob
+          // })
+
+          // 如果接口要求 Content-Type 是 multipart/form-data
+          // 则你必须传FormData 对象
+          const formData = new FormData()
+          formData.append('photo', blob)
+          const { data } = await changeuserPhoto(formData)
+          console.log(data)
+          // 关闭弹出层
+          this.$emit('close')
+          // 更新父组件视图
+          this.$emit('updata-photo', data.data.photo)
+          this.$toast('更新头像成功！')
+        })
+      } catch {
+        this.$toast('请求失败请稍后重试')
+      }
+    }
+
+
+

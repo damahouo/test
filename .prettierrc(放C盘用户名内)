@@ -1,0 +1,10 @@
+{
+    "semi": false,
+    "singleQuote": true,
+    "bracketSpacing": true
+}
+
+
+使用时删除本行及以下内容
+以下内容复制到setting.json 配置文件中 123指的是自己的用户名
+"prettier.configPath": "C:\\Users\\123\\.prettierrc",

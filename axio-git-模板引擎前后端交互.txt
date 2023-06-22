@@ -6,7 +6,9 @@ var xhrOBJ= new XMLHttpRequest() 通过实例化的对象请求数据
 Ajax 实现网页与服务器之间的数据交互
 
 $.get()    $.post()   $.ajax()
+
 $.get(url ,[data],[callback] )  
+
 url 地址 必填
 data :请求资源期间要携带的参数 对象类型
 callback：请求成功时的回调函数 函数类型
@@ -258,43 +260,7 @@ Ajax 请求结束时，执行 ajaxStop 函数。可以在 ajaxStop 的 callback 
      $('#loading').hide()
  })
 
-axios是只专注于网络数据请求的库 
-axios 发起 get 请求的语法：
- axios.get('url', { params: { /*参数*/ } }).then(callback)
-具体的请求示例如下：
- // 请求的 URL 地址
- var url = 'https://ajax-base-api-t.itheima.net/api/get'
- // 请求的参数对象
- var paramsObj = { name: 'zs', age: 20 }
- // 调用 axios.get() 发起 GET 请求
- axios.get(url, { params: paramsObj }).then(function(res) {
-     // res.data 是服务器返回的数据
-     var result = res.data  //这里的res.data 才是服务器响应的真实数据，res是axios包装的数据
-     console.log(res)
- })
 
-
-axios 发起 post 请求的语法：
- axios.post('url', { /*参数*/ }).then(callback)
- 具体请求方式如下
-// 请求的 URL 地址
- var url = 'http://www.liulongbin.top:3006/api/post'
- // 要提交到服务器的数据
- var dataObj = { location: '北京', address: '顺义' }
- // 调用 axios.post() 发起 POST 请求
- axios.post(url, dataObj).then(function(res) {
-     // res.data 是服务器返回的数据
-     var result = res.data
-     console.log(result)
- })
-
-axios 也提供了类似于 jQuery 中 $.ajax() 的函数，语法如下：
- axios({
-     method: '请求类型',
-     url: '请求的URL地址',
-     data: { /* POST数据 */ },
-     params: { /* GET参数 */ }
- }) .then(callback)
 
 
 jQuery 提供的 $.ajax() 函数，除了可以发起真正的 Ajax 数据请求之外，还能够发起 JSONP 数据请求，例如：
@@ -358,4 +324,95 @@ git pull			从远程仓库拉取最新的代码保存到本地分支内
 git push 远程仓库名 --delete 分支名   	删除远程仓库的分支
 远程仓库名默认名 origin
 
- 		 
+ 	
+axios是只专注于网络数据请求的库 
+	axios.get()  	  axios.post()   	 axios.delete()   		 axios.put()
+axios 发起 get 请求的语法：
+ axios.get('url', { params: { /*参数*/ } }).then(callback)
+具体的请求示例如下：
+ // 请求的 URL 地址
+ var url = 'https://ajax-base-api-t.itheima.net/api/get'
+ // 请求的参数对象
+ var paramsObj = { name: 'zs', age: 20 }
+ // 调用 axios.get() 发起 GET 请求
+ axios.get(url, { params: paramsObj }).then(function(res) {
+     // res.data 是服务器返回的数据
+     var result = res.data  //这里的res.data 才是服务器响应的真实数据，res是axios包装的数据
+     console.log(res)
+ })
+
+
+axios 发起 post 请求的语法：
+ axios.post('url', { /*参数*/ }).then(callback)
+ 具体请求方式如下
+// 请求的 URL 地址
+ var url = 'http://www.liulongbin.top:3006/api/post'
+ // 要提交到服务器的数据
+ var dataObj = { location: '北京', address: '顺义' }
+ // 调用 axios.post() 发起 POST 请求
+ axios.post(url, dataObj).then(function(res) {
+     // res.data 是服务器返回的数据
+     var result = res.data
+     console.log(result)
+ })
+
+axios 也提供了类似于 jQuery 中 $.ajax() 的函数，语法如下：
+ axios({
+     method: '请求类型',
+     url: '请求的URL地址',
+     data: { /* POST数据 */ },
+     params: { /* GET参数 */ }，
+     headers: {
+      Authorization: `Bearer ${store.state.userToken.token}`		//添加请求的方法 添加token请求头
+    }
+ }) .then(callback)	 
+
+
+axios在请求到数据之后 在怔怔地数据之外 套了一层壳 
+{
+config：{}
+data:{},
+handers:{},
+request:{},
+status:{},
+statusText:{}
+}
+
+
+如果某个方法的返回值是promise 的实例 则前面可以添加  async / await  进行修饰
+使用解构赋值 从axios 封装的大对象中 把data属性 结构出来
+把结构出来的data 属性 使用冒号 进行重命名 一般都重命名为{ data：res }
+
+document
+        .querySelector("#btnget")
+        .addEventListener("click", async function () {
+          const { data: result } = await axios.get("url", { params: { id: 1 } })
+        })
+
+      document
+        .querySelector(`#btnpost`)
+        .addEventListener(`click`, async function () {
+          const { data: res } = await axios.post(`url`, { arr: `数据` })
+          //    xiaos的get请求传参需要传对象格式里params  但是post请求传参对象里可以直接写数据
+          console.log(res)
+        })
+			添加请求拦截器 配置默认请求头 token 的值
+// 给（request）axios 也就是向外暴漏的对象 添加请求拦截器
+request.interceptors.request.use(
+  // config 形参 是本次请求的配置对象
+  config => {
+    // 从仓库获取token值
+    const { userToken } = store.state
+    // 判断用户仓库内有没有token值
+    if (userToken && userToken.token) {
+      // 有的话就配置请求头为token值
+      config.headers.Authorization = `Bearer ${userToken.token}`
+    }
+    //  注意 这里务必要返回config 配置对象，否则请求就停留在这里发不出了
+    return config
+  },
+  error => {
+    // 如果请求出错了（此时还没有发出去） 会进入这里
+    return Promise.reject(error)
+  }
+)

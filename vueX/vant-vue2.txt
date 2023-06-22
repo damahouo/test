@@ -1,0 +1,160 @@
+按照官方文档装不上可以尝试此命令：
+npm i vant@latest-v2 -S --legacy-peer-deps 优雅解决冲突
+
+disabled 禁用吗
+
+动态添加元素类名 动态添加类名
+v-band：class= 类名 ： 跟一个布尔值表达式 true的话就添加此类名 false就不加
+:class="{actives:index===actives}"
+
+开发阶段全部导入vant
+发布阶段有方案优化
+
+在main.js 配置，导入并安装插件
+import Vant from 'vant';
+import 'vant/lib/index.css';
+
+Vue.use(Vant);
+
+路由相关的组件放views文件夹下
+可复用的组件放components文件夹下
+
+vant组件中用了placeholder属性，会导致选不中导航栏修改样式颜色 这时候可以加/deep/深度选择器在标签之前
+
+解决axios服用问题
+封装request.js模块：
+import axios from 'axios'
+const request = axios.create({
+  // 指定根路径
+  baseURL: 'https://applet-base-api-t.itheima.net'
+})
+
+export default request
+
+然后封装获取数据的方法
+// 导入request.js 在使用的模块内
+import request from '@/Utils/request.js'			//1 先导入自定义的axios模块
+
+export default {
+  name: 'HomeVue',
+  created() {					//6 获取文章列列表函数需要在一打开页面就使用 所以在created声明周期内调用一次
+    this.initArtcleList()
+  },
+  data() {
+    return {
+      page: 1,					//5 在data内定义请求时需要发送的参数
+      limit: 10
+    }
+  },
+  methods: {
+    						// 2 封装获取文章列表数据的方法
+    async initArtcleList() {
+      const { data: res } = await request.get('/articles', {	//3 获取到的数据是promis对象，需要用await 和async修饰
+        params: {
+          _page: this.page,				//4 这两个参数是需要get请求时发送的参数，需要先到data内定义请求参数
+          _limit: this.limit
+        }
+      })
+      console.log(res)
+    }
+  }
+}
+
+
+---------------------------------------------------------
+// 当属性值为对象的时候，默认值为一个方法的返回值
+cover: {
+      type: Object,
+      default() {
+        // 当属性值为对象的时候，默认值为一个方法的返回值
+        return { type: 0 }
+      }
+    }
+
+下拉加载更多 
+1 触发触底事件时 让请求数据的页数+1 
+2 设置请求的新数据和旧数据做数组的拼接  [...旧数据数组,...新数据数组]
+3 当请求到的数据为空时，更改是否结束的值
+
+自定义vant主题
+1 第一步 重要！  把import 'vant/lib/index.css'改为index.less
+1.1 导入官方文档中 - 定制主题中的---如果 vue-cli 搭建的项目，可以在 vue.config.js 中进行配置  代码
+
+2，创建修改vant主题的less文件 把文件以绝对路径的形式引入到下面命令中
+ hack: 'true; @import "修改主题的less文件";' 
+2.1 创建绝对路径的办法：
+使用node.js的path方法，经行路径拼接
+const path = require('path')
+const themePth = path.join(__dirname, './src/theme.less')
+3.引入less文件
+hack: `true; @import "${themePth}";`
+
+
+//  vue.config.js这个配置文件，可以对整个项目的打包 构建进行全局的配置   本地双击打开配置
+npm run build 默认情况下打包的dist文件 内的html 双击是打不开的 只能发布到服务器上 http协议 才可以打开 
+需要双击打开的话要先配置
+vue.config.js--publicPath
+
+如何解决跨域
+什么是反向代理解决跨域问题 ：  本地node服务器开启cores 负责请求的妆发和数据接收回传
+
+
+二刷笔记
+
+=========================================================
+views   放路由组件
+components 放复用组件
+
+路由规则index该删除的删除
+
+npm i vant@latest-v2 -S --legacy-peer-deps
+
+路由重定向 redirect
+
+请求信息的模块放在 Utils 文件夹 下的 reques.js 文件下
+
+ 优雅解决冲突
+
+将request请求封装成一个js 设置请求的根路径 
+
+在将请求的分路径设置成一个js  导入request请求  
+import request from '@/Utils/request.js'
+// 定义获取文章列表的函数 并且将promise返回出去
+export const getArticleList = function(_page, _limit) {
+  // 要return 将返回的数据返回出去
+  return request.get('/articles', {
+    params: {
+      _page,
+      _limit
+    }
+  })
+}
+
+当一个数值的默认类型为对象的时候 他的默认值为一个方法 返回值retrunt 一个对象
+
+this.$dialog.confirm  调用组件内提示弹窗的时候 需要加this 并且dialog的d要改成小写
+
+ this.$toast('刷新失败请重试')		vant轻提示
+
+slot='' 设置插槽
+
+随机报错示例  0.5的几率将字符串转换为JSON格式 但是不是对象就转换不了会报错
+        if (Math.random() > 0.5) {
+          JSON.parse('asdfcasd')
+        }
+
+fixed 导航栏组件功能 固定定位
+
+横向多项标签页定位以后内容会撑不开 这时需要给元素加
+    z-index: 1;
+    right: 0;
+    left: 0;
+
+vant组件 list列表使用五大步骤
+1 请求数据
+2 将获取到的数据添加到list列表中
+3 将loading 设置为false 
+4 判断是否还有数据
+  有就更新下一页的数据页码
+  没有就设置finished结束
+5 设置加载失败样式

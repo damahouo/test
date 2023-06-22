@@ -139,3 +139,100 @@ module: {
 注意：
 ⚫ use 数组中指定的 loader 顺序是固定的
 ⚫ 多个 loader 的调用顺序是：从后往前调用
+	4. 打包处理 less 文件
+① 运行 npm i less-loader@10.0.1 less@4.1.1 -D 命令
+② 在 webpack.config.js 的 module -> rules 数组中，添加 loader 规则如下：
+ {test:/\.less$/,use:['style-loader','css-loader','less-loader']},
+	5. 打包处理样式表中与 url 路径相关的文件
+① 运行 npm i url-loader@4.1.1 file-loader@6.2.0 -D 命令
+② 在 webpack.config.js 的 module -> rules 数组中，添加 loader 规则如下：
+  {test:/\.jpg|.png|gif$/,use:['url-loader']},
+其中 ? 之后的是 loader 的参数项：{test:/\.jpg|.png|gif$/,use:['url-loader?limit=222222']},
+⚫ limit 用来指定图片的大小，单位是字节（byte）
+⚫ 只有 ≤ limit 大小的图片，才会被转为 base64 格式的图片
+
+webpack 只能打包处理一部分高级的 JavaScript 语法。对于那些 webpack 无法处理的高级 js 语法，需要借
+助于 babel-loader 进行打包处理。
+6.1 安装 babel-loader 相关的包
+运行如下的命令安装对应的依赖包：
+npm i babel-loader@8.2.2 @babel/core@7.14.6 @babel/plugin-proposal-decorators@7.14.5 -D
+在 webpack.config.js 的 module -> rules 数组中，添加 loader 规则如下
+ // 使用babel-loader 处理高级语法 exlude:/node_modules表示排除第三方包的js文件，因为其兼容性不需要程序员关心
+            {test:/\.js$/,use:'babel-loader',exclude:/node_modules/},
+在项目根目录下，创建名为 babel.config.js 的配置文件，定义 Babel 的配置项如下：
+module.exports = {
+    // 声明babel 可用的插件
+    // 将来 webpack 在调用 babel-loader 的时候 会先加载 pulugins 使用
+    "plugins": [['@babel/plugin-proposal-decorators', { legacy: true }]]
+  
+}
+详情请参考 Babel 的官网 https://babeljs.io/docs/en/babel-plugin-proposal-decorators
+
+2. 配置 webpack 的打包发布
+在 package.json 文件的 scripts 节点下，新增 build 命令如下：
+"scripts": {
+    "dev": "webpack serve",				//开发阶段运行npm run dev 生成文件在磁盘
+    "build":"webpack --mode production"		//发布阶段运行 npm run build 生成文件在物理磁盘
+  },
+--model 是一个参数项，用来指定 webpack 的运行模式。production 代表生产环境，会对打包生成的文件
+进行代码压缩和性能优化。
+注意：通过 --model 指定的参数项，会覆盖 webpack.config.js 中的 model 选项。
+
+3. 把 JavaScript 文件统一生成到 js 目录中
+在 webpack.config.js 配置文件的 output 节点中，进行如下的配置
+output: {
+        path: path.join(__dirname,'dist'), //指定存到哪个目录
+        filename:'js/boundle.js'           //明确告诉webpack 把生成的bundle.js文件放到dist目录下的js子目录中
+    },
+
+4. 把图片文件统一生成到 image 目录中
+修改 webpack.config.js 中的 url-loader 配置项，新增 outputPath 选项即可指定图片文件的输出路径
+ { test: /\.jpg|.png|gif$/, use: 'url-loader?limit=20&outputPath=images'}, //在配置url-loader多个参数之间使用&分割 
+
+5. 自动清理 dist 目录下的旧文件
+为了在每次打包发布时自动清理掉 dist 目录中的旧文件，可以安装并配置 clean-webpack-plugin 插件：
+安装清理dist 目录的webpack 插件
+npm install --save-dev clean-webpack-plugin
+webpack 配置文件中导入构造函数
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+plugins 节点中 新增数组配置实例化对象new CleanWebpackPlugin()
+plugins: [htmlPlugin,new CleanWebpackPlugin()],
+
+		什么是 Source Map
+Source Map 就是一个信息文件，里面储存着位置信息。也就是说，Source Map 文件中存储着压缩混淆后的
+代码，所对应的转换前的位置。
+有了它，出错的时候，除错工具将直接显示原始代码，而不是转换后的代码，能够极大的方便后期的调试
+开发环境下，推荐在 webpack.config.js 中添加如下的配置，即可保证运行时报错的行数与源代码的行数
+保持一致：
+module.exports = {
+    devtool:'eval-source-map',      //在开发调试阶段，建议把devtool 的值设置为eval-source-map
+}
+在生产环境下，如果只想定位报错的具体行数，且不想暴露源码。此时可以将 devtool 的值设置为
+nosources-source-map。
+在生产环境下，如果想在定位报错行数的同时，展示具体报错的源码。此时可以将 devtool 的值设置为
+source-map。
+		Source Map 的最佳实践
+① 开发环境下：
+⚫ 建议把 devtool 的值设置为 eval-source-map
+⚫ 好处：可以精准定位到具体的错误行
+② 生产环境下：
+⚫ 建议关闭 Source Map 或将 devtool 的值设置为 nosources-source-map
+⚫ 好处：防止源码泄露，提高网站的安全性
+
+
+实际开发中需要自己配置 webpack 吗？
+答案：不需要！
+⚫ 实际开发中会使命令行工具（俗称 CLI）一键生成带有 webpack 的项目
+⚫ 开箱即用，所有 webpack 配置项都是现成的！
+⚫ 我们只需要知道 webpack 中的基本概念即可！
+
+
+
+导入文件时建议使用@ 符号 表示src 源代码目录从外往里找，而不是使用../从里往外找
+但是@不能直接用，需要先配置：
+resolve: {
+        alias: {
+          //告诉webpack 程序员写的代码中 @ 符号表示src这一层目录  
+            '@':path.join(__dirname,'./src')
+        }
+    }

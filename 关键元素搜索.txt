@@ -1,10 +1,18 @@
 18:00 2023/4/4
+&nbsp;			空格实体字符
 ctrl + h 			全局查找加替换
 ctrl+G			跳转行数
 current			当前选择状态类名
 </br>			换行
 console.dir()		打印对象
 str.toUpperCase()		将字符串转换成大写
+label 的 for 属性 		<label for="input标签id" 测试文字></label>  此时点击测试文字就是选中id所指向的input标签
+字符串.charAt()		这个方法接收索引值 表示从字符串中把索引对应的字符取出来
+debugger			用代码的方式打断点
+/* 内减模式 */
+*{
+    box-sizing: border-box;
+}
 
 overflow:hidden 		超出盒子隐藏
 display:none   		显示模式为空
@@ -30,7 +38,7 @@ reset 		重置按钮     元素.reset() 重置表单
 button  		配合js使用 
 requirde		属性，非空的，必须输入 <input requirde> 输入内容不能为空
 change		改变事件 值内容发生变化时触发
-
+hr		标签 水平分割线
 
 select 		下拉菜单标签
 option		下拉菜单选项
@@ -105,6 +113,7 @@ animation	：动画名称   动画时长   速度曲线   延长时间    重复
 		}
 
 flex-wrap:wrap 			flex弹性盒子换行模式
+white-space:nowrap;		禁止换行
 flex：direction; 			弹性盒子更换主轴方向
 align-content: flex-start;		弹性盒子内容位置（换行后子集上下有间距时）
 
@@ -144,11 +153,23 @@ mdn网站
 
 属性名 instanceof Array  判断属性名的属性值是否属于数组、Objice对象同理
 数组名.push	数组末尾新增增加元素，并返回新的数组元素数量，数组内追加元素
-数组名.unshift	数组开头新增增加元素，并返回新的数组元素数量
+数组名.unshift	数组开头新增增加元素，并返回新的数组元素数量 数组插入数据
 数组名.pop 	删除数组最后一位元素，并返回被删除的元素值
 数组名.shift	删除数组第一位元素，并返回被删除的元素值
 数组名.splice(起始位置下标索引号,删除元素个数{不写会将起始位后面的元素全部删除})    
+数组名.indexOf	可以用来查找数组中是否有某一项，有的话返回下标索引，没有返回-1 可以配合删除来删除数组内指定元素
 字符串.replace() 字符串替换
+		支持正则表达式 vue中相关字符高亮实例：
+   heightlight(str) {
+      // 定义高亮的部分，为一个html标签，加上相关的类名
+      const heightlightStr = `<span class="active">${this.searchText}</span>`
+      // 正则匹配的规则，因为需要传入数据，所以要new RegExp(需要匹配的数据，相关规则)
+      const reg = new RegExp(this.searchText, 'gi') // g代表全局i代表不区分字母大小写
+      // 利用字符串的替换方法，将需要高亮的部分替换为html标签，利用v-html解析：<div slot="title" v-html="heightlight(item)"></div>
+      return str.replace(reg, heightlightStr)
+    }
+
+
 数组.join(`\r\n`)		将数组转换成字符串，且换行  \r\n表示换行
 
 冒泡排序 外层循环：
@@ -316,6 +337,38 @@ date.getFullYear()			获取年
 date.getMonth()			获取月
 date.getDate()			获取日
 
+可以用插件 dayjs 快速进行时间格式化
+dayjs(时间字符串).format('YYYY-MM-DD HH-mm-ss')	
+直接调用时获取当前时间，不传入时间字符串的话
+传入时间 得到指定的时间
+format 内传一个字符串的格式 得到对应的时间格式 例：YYYY-MM-DD
+ =========================dayjs方法示例===========================================
+import dayjs from 'dayjs'
+
+// 加载中文语言包 es6 语法
+import 'dayjs/locale/zh-cn'
+
+// 配置需要加载的插件 得到某时间距离当前时间XXX前 在RelativeTime插件模块中
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+// 全局使用
+dayjs.locale('zh-cn')
+// var relativeTime = require('dayjs/plugin/relativeTime') 我们需要修改为es6语法 此行是官方复制的来 修改后看上上上一行
+dayjs.extend(relativeTime)
+
+// 暴露一个方法 该方法得到一个时间str 返回该时间距离当前时间多久
+export const dayformat = (datStr) => {
+  return dayjs().to(dayjs(datStr))
+}
+
+// dayjs().from(dayjs('1990-01-01')) // 31 年后
+// dayjs().from(dayjs('1990-01-01'), true) // 31 年
+// dayjs().fromNow()
+
+// dayjs().to(dayjs('1990-01-01')) // 31 年前
+// dayjs().toNow()
+=========================dayjs方法示例===========================================
+
 可以通过传入时间字符串，通过new Date 方法获得中国标准时间
 例：new Date(2019-10-21T19:59:44.000Z) =Tue Oct 22 2019 03:59:44 GMT+0800 (中国标准时间)
 再通过Tue Oct 22 2019 03:59:44 GMT+0800 (中国标准时间).toLocaleString()=2019/10/22 03:59:44
@@ -347,8 +400,9 @@ event loop 		事件循环
 
 location.href=``		页面会跳转到写的链接里
 location.reload()		刷新 括号内传入true 为强制刷新==ctrl+F5S
-search 属性		获取地址中携带的参数，符号？后面的内容
-hash  属性		获取地址中的哈希值，符号#后面的内容
+location.search 属性		获取地址中携带的参数，符号？后面的内容
+location.hash  属性		获取地址中的哈希值，符号#后面的内容
+window.onhashchange=>{}	动态监听哈希地址变化
 
 // 检测 userAgent（浏览器信息检测打开方式是pc还是移动端）
 !(function () {
@@ -398,6 +452,8 @@ $ 	表示匹配行尾的文本以谁结束
 /^1(3\d|4[5-9]|5[0-35-9]|6[567]|7[0-8]|8\d|9[0-35-9])\d{8}$/	手机号验证
 /^\d{6}$/			六位数验证码验证
 /^[a-zA-Z0-9-_]{6,20}$/	六到20位密码验证
+在表单内加入type="number or string"		可以规定输入框只能输入数字或者文字
+maxlength="11"				可以规定输入的最大长度为11位		同上属性都是HTML5 的方法
 
 arguments，动态参数，只存在于函数内，是个伪数组，装着函数传入的参数
 ...剩余参数，剩余参数是个真数组
@@ -408,35 +464,56 @@ Object       .kesy(对象) 可以获得对象中所有属性（键）返回的�
 	\.values,获取所有的值
 	.assign（oo,o）,拷贝，把o拷贝放入oo，可以理解为追加，或者添加，会直接修改原对象
 Array      .forEach   		遍历数组
-	.filter		筛选过滤数组
+	.filter		筛选过滤数组 arr.fliter(item=>item.status)
 	.map		加工数组
 	.reduce    		(累计器，返回累计处理的结果，经常用于数组求和)
 	arr.reduce(function(上一次的值prev，当前值item{}，初始值)，需要return返回结果
-	例	子：const getarrSum = arr => arr.reduce((prev, item) => prev += item, 0)   //输出结果为arr的数组求和值
+	例	子：const getarrSum = arr => arr.reduce((prev, item) => {prev += item}, 0)   //输出结果为arr的数组求和值
 ·	如果有起始值，则起始值作为上一次值开始循环累加，没有就是数组内第一个值作为上一次值
+let sum = arr.reduce((prev, item) => {
+        return (prev += item.price)
+      }, 0)
+
 	.find		查找元素，返回符合测试条件的第一个数组元素值，若没有符合条件的则返回undefined
 	arr.find((item) => item.name === `鸡哥`)，查找符合name是鸡哥的元素并返回这个元素
-	.every		检测数组所有元素是否符合指定条件，如果所有元素都通过检测返回true,否则返回false
+	.every		检测数组所有元素是否符合指定条件，如果所有元素都通过检测返回true,否则返回false arr.every(item=>{tiem.bool})
 	arr.every((item) => item.name === `鸡哥`)//false or true 
                  join		数组元素拼接为字符串，返回字符串	
-                 some		检测数组中的元素是否满足指定条件，如果数组中有元素满足条件返回true，否则返回false
+                 some		检测数组中的元素是否满足指定条件，如果数组中有元素满足条件返回true，否则返回false 可以传参拿到数值和索引
                  concat		合并两个数组，返回生成新数组
                  sort		对原数组单元值排序
                  splice		删除或替代原数组单元
                  reverse		反转数组
                  findIndex		查找元素的索引值
                  Array.from	伪数组转换为真数组
+删除两个数组对象中相同的对象
+
+//函数封装    
+resArr(arr1, arr2) {
+  return arr1.filter((v) => arr2.every((val) => val.id!= v.id));
+},
+ 
+//调用
+let newArr= this.resArr(arr1,arr2)
+console.log(newArr);
+————————————————
+
 
 String
 	实例方法
+	.slice()		从传入索引截取字符串		
 	.split(`分隔符`)      用分隔符将字符串转换为数组   join（`分隔符`） 数组转换为字符串
 	.substring(开始索引号，结束索引号可以省略）	            截取字符串，包头不包尾
 	.startsWith(searchString[,position])          判断字符是不是以某字符开头，默认位置是开头0，返回布尔值
-	.includes            判断一个字符串是否包含在另一个字符串中，返回布尔值 默认位置是字符开头0
+	.includes            判断一个字符串是否包含在另一个字符串 
+			也可以用于判断一个数组是否包含某个数据 arr.includes(1),数据包含1返回true 不包含返回false
+
+中，返回布尔值 默认位置是字符开头0
 	（了解）
 	.toUpperCase 	用于将字母转换成大写
 	.toLowerCase	用于将字母转换成小写
-	.indexOf		检测是否包含某字符
+	.indexOf		检测是否包含某字符     包含的话返回字符的下标索引 不包含的话返回-1
+			可以用来查找数组中是否有某一项，有的话返回下标索引，没有返回-1
 	.endsWith		检测是否以某字符结尾
 	.replace		用于替换字符串，支持正则匹配
 	.match		用于查找字符串，支付正则匹配
@@ -486,7 +563,8 @@ bind()		不会调用函数改变this指向，fn.bind(this指向)不会调用函�
 	bind不调用函数，但是还想改变this指向，比如改变定时器内部的this指向
 
 防抖 	debounce单位时间内频繁触发事件，只执行最后一次  		 搜索框输入，手机号，邮箱验证输入检测
-  Lodash插件：	 _.debounce(fun,时间) 效果：停止对应时间，再执行函数
+  Lodash插件：	 _.debounce(fun,时间) 效果：停止对应时间，再执行函数  
+vue中引入import { debounce } from 'lodash'  后 ，使用时不需要加_.  直接使用debounce即可    注：watch事件监听中的handler需要写成常规模式函数handler:
 要写在事件监听的函数里，不能写在中间
 手写防抖核心是
 利用定时器实现
@@ -496,3 +574,97 @@ bind()		不会调用函数改变this指向，fn.bind(this指向)不会调用函�
 
 节流：throttle 	单位时间内频繁触发事件，只执行一次（针对高频事件） 	高频鼠标移动，页面尺寸缩放 滚动条滚动
 		_.throttle(fun,时间)  规定时间内只执行一次函数
+
+问题：为什么滚动列表会互相影响？ 怎么让滚动条记录在原来的位置
+因为他们并不是在自己内部滚动，而是整个body页面滚动。 无论你是在a频道还是b频道，其实滚动的都是body元素。
+
+快速找到哪个元素产生滚动条的
+      function findscroller(element){
+        element.onscroll=function () {
+            console.log(element)
+        }
+        Array.from(element.children).forEach(findscroller)
+  }
+  findscroller(document.body)
+
+视口宽度 视口高度 1vw = 可是窗口宽度的百分之一
+视口高度 视口高度 1vh = 可视窗口高度的百分之一
+
+组件产生自己的滚动容器：
+  height: 80vh;               1 给需要滚动的区域根组件设置固定的高度 
+  overflow-y: auto;	       2  设置y轴超出滚动
+
+格式化时间
+npm install moment --save   # npm
+yarn add moment             # Yarn
+
+import moment from 'moment'
+
+格式化日期
+moment().format('MMMM Do YYYY, h:mm:ss a'); // February 26th 2023, 5:02:25 pm
+moment().format('dddd');                    // Sunday
+moment().format("MMM Do YY");               // Feb 26th 23
+moment().format('YYYY [escaped] YYYY');     // 2023 escaped 2023
+moment().format();                          // 2023-02-26T17:02:25+08:00                                
+
+相对时间
+moment("20111031", "YYYYMMDD").fromNow(); // 11 years ago
+moment("20120620", "YYYYMMDD").fromNow(); // 11 years ago
+moment().startOf('day').fromNow();        // 17 hours ago
+moment().endOf('day').fromNow();          // in 7 hours
+moment().startOf('hour').fromNow();       // 3 minutes ago               
+
+日历时间
+moment().subtract(10, 'days').calendar(); // 02/16/2023
+moment().subtract(6, 'days').calendar();  // Last Monday at 5:03 PM
+moment().subtract(3, 'days').calendar();  // Last Thursday at 5:03 PM
+moment().subtract(1, 'days').calendar();  // Yesterday at 5:03 PM
+moment().calendar();                      // Today at 5:03 PM
+moment().add(1, 'days').calendar();       // Tomorrow at 5:03 PM
+moment().add(3, 'days').calendar();       // Wednesday at 5:03 PM
+moment().add(10, 'days').calendar();      // 03/08/2023 
+
+封装一些常用的日期工具
+// 日期相关
+export const HDate = {
+  // 年-月-日
+  shortTime (value, formater = 'YYYY-MM-DD HH:mm:ss') {
+    return moment(value).format(formater)
+  },
+  // 当前日期
+  getNowDate () {
+    return this.shortTime(new Date())
+  },
+  // 当月第一天 00:00:00
+  monthOne () {
+    return moment(this.getNowDate()).format('YYYY-MM-01 00:00:00')
+  },
+  // 某一天的 00:00:00
+  startOfDay (date) {
+    return moment(date).startOf('day').format('YYYY-MM-DD HH:mm:ss')
+  },
+  // 某一天的 23:59:59
+  endOfDay (date) {
+    return moment(date).endOf('day').format('YYYY-MM-DD HH:mm:ss')
+  }
+}
+
+
+unset 	取消设置
+
+Referer 是什么东西？ 第三方图片请求失败是为什么
+
+> 扩展参考：http://www.ruanyifeng.com/blog/2019/06/http-referer.html
+
+Referer 是 HTTP 请求头的一部分，当浏览器向 Web 服务器发送请求的时候，一般会带上 Referer，它包含了当前请求资源的来源页面的地址。服务端一般使用 Referer 请求头识别访问来源，可能会以此进行统计分析、日志记录以及缓存优化等。
+用 `<a>`、`<area>`、`<img>`、`<iframe>`、`<script>` 或者 `<link>` 元素上的 `referrerpolicy` 属性为其设置独立的请求策略，例如：
+<img src="http://……" referrerPolicy="no-referrer">
+
+或者直接在 HTMl 页面头中通过 meta 属性全局配置：
+<meta name="referrer" content="no-referrer" />
+
+
+        if (Math.random() > 0.5) {
+          JSON.parse('asdfcasd')
+        }
+随机抛出一个错误 制造一个错误
